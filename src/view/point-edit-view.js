@@ -154,7 +154,7 @@ const createNewEditTemplate = () => ('<form class="event event--edit" action="#"
   '                </section>\n' +
   '              </form>');
 
-export default class EditPointView {
+export default class PointEditView {
   getTemplate() {
     return createNewEditTemplate();
   }
