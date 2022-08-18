@@ -1,26 +1,26 @@
 import {render} from '../render.js';
-import TripEventsView from '../view/trip-events.js';
 import PointListView from '../view/point-list-view.js';
 import PointAddView from '../view/point-add-view.js';
-import EditPointView from '../view/edit-point.js';
 import PointItemView from '../view/point-item-view.js';
+import PointEditView from '../view/point-edit-view.js';
 
 export default class TripPresenter {
-  tripComponent = new TripEventsView();
-  pointListComponent = new PointListView();
+  pointListView = new PointListView();
   pointAddView = new PointAddView();
-  editPointView = new EditPointView();
+  pointEditView = new PointEditView();
 
-  init = (tripContainer) => {
-    this.tripContainer = tripContainer;
-
-    render(this.editPointView, this.tripContainer);
+  init = (tripEvents, pointsModel) => {
+    this.tripContainer = tripEvents;
+    this.pointsModel = pointsModel;
+    this.tripPoints = [...this.pointsModel.getPoints()];
+    this.tripOffers = [...this.pointsModel.getOffers()];
+    render(this.pointEditView, this.tripContainer);
     render(this.pointAddView, this.tripContainer);
-    render(this.tripComponent, this.tripContainer);
-    render(this.pointListComponent, this.tripComponent.getElement());
+    render(this.pointListView, this.tripContainer);
+    const selectedOffers = this.tripOffers;
 
-    for (let i = 0; i < 3; i++) {
-      render(new PointItemView(), this.pointListComponent.getElement());
+    for (let i = 0; i < this.tripPoints.length; i++) {
+      render(new PointItemView(this.tripPoints[i], selectedOffers), this.pointListView.getElement());
     }
   };
 }
