@@ -3,19 +3,13 @@ import {humanizePointDueDate, humanizePointDueTime} from '../util.js';
 
 const createNewPointItemTemplate = (point, offers) => {
   const {basePrice, dateFrom, dateTo, type, destination} = point;
-  const {title, price} = offers.slice().shift();
+  const {title, price} = offers.shift();//придумать способ добавления всех офферов
 
-  const eventDate = dateFrom !== null
-    ? humanizePointDueDate(dateFrom)
-    : '';
+  const eventDate = dateFrom ? humanizePointDueDate(dateFrom) : '';
 
-  const endTime = dateTo !== null
-    ? humanizePointDueTime(dateTo)
-    : '';
+  const endTime = dateTo ? humanizePointDueTime(dateTo) : '';
 
-  const startTime = dateFrom !== null
-    ? humanizePointDueTime(dateFrom)
-    : '';
+  const startTime = dateFrom ? humanizePointDueTime(dateFrom) : '';
 
   return (
     `<li class="trip-events__item">
@@ -52,24 +46,26 @@ const createNewPointItemTemplate = (point, offers) => {
 };
 
 export default class PointItemView {
+  #element = null;
+
   constructor(point, offers) {
     this.point = point;
     this.offers = offers;
   }
 
-  getTemplate() {
+  get template() {
     return createNewPointItemTemplate(this.point, this.offers);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }
