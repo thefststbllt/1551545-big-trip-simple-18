@@ -11,19 +11,21 @@ const createNewFilterTemplate = () => ('<form class="trip-filters" action="#" me
   '</form>');
 
 export default class ListFilterView {
-  getTemplate() {
+  #element = null;
+
+  get template() {
     return createNewFilterTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }
