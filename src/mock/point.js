@@ -11,16 +11,16 @@ const generateType = () => {
 const idCollection = [];
 const generateOffersId = () => {
   const offersArray = Array.from({length: 5}, generateOffer);
-  offersArray.forEach((item) => idCollection.push(item['id']));
+  offersArray.forEach((item) => idCollection.push(item.id));
   return new Set(idCollection);
 };
 
 export const generatePoint = () => ({
-  'basePrice': getRandomInteger(1000, 5000),
-  'dateFrom': `2019-07-${getRandomInteger(10, 30)}T22:55:56.845Z`,
-  'dateTo': `2019-07-${getRandomInteger(10, 30)}T11:22:13.375Z`,
-  'destination': generateDestination(),
-  'id': '0',
-  'offers': generateOffersId(),
-  'type': generateType(),
+  basePrice: getRandomInteger(1000, 5000),
+  dateFrom: `2019-07-${getRandomInteger(10, 30)}T22:55:56.845Z`,
+  dateTo: `2019-07-${getRandomInteger(10, 30)}T11:22:13.375Z`,
+  destination: generateDestination(),
+  id: '0',
+  offers: generateOffersId(),
+  type: generateType(),
 });
