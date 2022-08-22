@@ -9,9 +9,9 @@ const tripMainFilters = tripMainElement.querySelector('.trip-controls__filters')
 const mainElement = document.querySelector('main');
 const tripEvents = mainElement.querySelector('.trip-events');
 const pointsModel = new PointsModel();
-const tripPresenter = new TripPresenter();
+const tripPresenter = new TripPresenter(tripEvents, pointsModel);
 
 render(new ListFilterView(), tripMainFilters);
 render(new SortView(), tripEvents);
 
-tripPresenter.init(tripEvents, pointsModel);
+tripPresenter.init();
