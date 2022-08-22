@@ -3,7 +3,15 @@ import {humanizePointDueDate, humanizePointDueTime} from '../util.js';
 
 const createNewPointItemTemplate = (point, offers) => {
   const {basePrice, dateFrom, dateTo, type, destination} = point;
-  const {title, price} = offers.shift();//придумать способ добавления всех офферов
+
+  const generatedOfferTemplate = (title, price) => `<li class="event__offer"><span class="event__offer-title">${title}</span> &plus;&euro;&nbsp;<span class="event__offer-price">${price}</span></li>`;
+
+  //Creating an array and making a string out of it
+  const finalOffers = [];
+  offers.forEach((item) => {
+    finalOffers.push(generatedOfferTemplate(item.title, item.price));
+  });
+  const stringOffers = finalOffers.join('');
 
   const eventDate = dateFrom ? humanizePointDueDate(dateFrom) : '';
 
@@ -31,11 +39,7 @@ const createNewPointItemTemplate = (point, offers) => {
   </p>
   <h4 class="visually-hidden">Offers:</h4>
   <ul class="event__selected-offers">
-  <li class="event__offer">
-  <span class="event__offer-title">${title}</span>
-  &plus;&euro;&nbsp;
-  <span class="event__offer-price">${price}</span>
-  </li>
+    ${stringOffers}
   </ul>
   <button class="event__rollup-btn" type="button">
   <span class="visually-hidden">Open event</span>
