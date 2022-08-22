@@ -3,23 +3,28 @@ import PointListView from '../view/point-list-view.js';
 import PointAddView from '../view/point-add-view.js';
 import PointItemView from '../view/point-item-view.js';
 import PointEditView from '../view/point-edit-view.js';
+import NoPointView from '../view/no-point-view.js';
 
 export default class TripPresenter {
+  #tripContainer = null;
+  #pointsModel = null;
+  #tripPoints = [];
+  #tripOffers = [];
+
   #pointListView = new PointListView();
   #pointAddView = new PointAddView();
 
-  init = (tripEvents, pointsModel) => {
-    this.tripContainer = tripEvents;
-    this.pointsModel = pointsModel;
-    this.tripPoints = this.pointsModel.points;
-    this.tripOffers = this.pointsModel.offers;
-    render(this.#pointAddView, this.tripContainer);
-    render(this.#pointListView, this.tripContainer);
-    const selectedOffers = this.tripOffers;
+  constructor(tripEvents, pointsModel) {
+    this.#tripContainer = tripEvents;
+    this.#pointsModel = pointsModel;
+  }
 
-    for (let i = 0; i < this.tripPoints.length; i++) {
-      this.#renderPoint(this.tripPoints[i], selectedOffers);
-    }
+  init = () => {
+    this.#tripPoints = this.#pointsModel.points;
+    this.#tripOffers = this.#pointsModel.offers;
+    render(this.#pointAddView, this.#tripContainer);
+
+    this.#renderTrips();
   };
 
   #renderPoint = (point, offers) => {
@@ -58,6 +63,17 @@ export default class TripPresenter {
     });
 
     render(pointItemView, this.#pointListView.element);
+  };
+
+  #renderTrips = () => {
+    if (this.#tripPoints.length === 0) {
+      render(new NoPointView(), this.#tripContainer);
+    } else {
+      render(this.#pointListView, this.#tripContainer);
+      for (let i = 0; i < this.#tripPoints.length; i++) {
+        this.#renderPoint(this.#tripPoints[i], this.#tripOffers);
+      }
+    }
   };
 }
 
