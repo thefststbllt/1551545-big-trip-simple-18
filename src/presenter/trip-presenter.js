@@ -1,4 +1,4 @@
-import {render} from '../render.js';
+import {render, replace} from '../framework/render.js';
 import PointListView from '../view/point-list-view.js';
 import PointAddView from '../view/point-add-view.js';
 import PointItemView from '../view/point-item-view.js';
@@ -32,11 +32,11 @@ export default class TripPresenter {
     const pointEditView = new PointEditView();
 
     const replacePointToForm = () => {
-      this.#pointListView.element.replaceChild(pointEditView.element, pointItemView.element);
+      replace(pointEditView, pointItemView);
     };
 
     const replaceFormToPoint = () => {
-      this.#pointListView.element.replaceChild(pointItemView.element, pointEditView.element);
+      replace(pointItemView, pointEditView);
     };
 
     const onEscKeyDown = (evt) => {
@@ -47,18 +47,17 @@ export default class TripPresenter {
       }
     };
 
-    pointItemView.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    pointItemView.setClickHandler(() => {
       replacePointToForm();
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    pointEditView.element.addEventListener('submit', (evt) => {
-      evt.preventDefault();
+    pointEditView.setFormSubmitHandler(() => {
       replaceFormToPoint();
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    pointEditView.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    pointEditView.setClickHandler(() => {
       replaceFormToPoint();
     });
 
