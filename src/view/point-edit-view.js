@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const createNewEditTemplate = () => ('<form class="event event--edit" action="#" method="post">\n' +
   '                <header class="event__header">\n' +
@@ -154,22 +154,28 @@ const createNewEditTemplate = () => ('<form class="event event--edit" action="#"
   '                </section>\n' +
   '              </form>');
 
-export default class PointEditView {
-  #element = null;
-
+export default class PointEditView extends AbstractView {
   get template() {
     return createNewEditTemplate();
   }
 
-  get element() {
-    if(!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
+  };
 
-    return this.#element;
-  }
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
 
-  removeElement() {
-    this.#element = null;
-  }
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.addEventListener('submit', this.#formSubmitHandler);
+  };
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  };
 }
