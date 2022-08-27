@@ -31,4 +31,9 @@ const OFFER_IDS = ['1', '2', '3', '4', '5'];
 
 const OFFER_PRICES = ['100', '200', '150', '120', '170'];
 
-export {CITIES_COLLECTION, DESCRIPTIONS, OFFER_TITLES, OFFER_IDS, OFFER_PRICES, EVENT_TYPES};
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future'
+};
+
+export {CITIES_COLLECTION, DESCRIPTIONS, OFFER_TITLES, OFFER_IDS, OFFER_PRICES, EVENT_TYPES, FilterType};

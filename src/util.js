@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {FilterType} from './mock/const.js';
 
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -10,4 +11,9 @@ const getRandomInteger = (a = 0, b = 1) => {
 const humanizePointDueDate = (dueDate) => dayjs(dueDate).format('MMM D');
 const humanizePointDueTime = (dueTime) => dayjs(dueTime).format('HH:HH');
 
-export {getRandomInteger, humanizePointDueDate, humanizePointDueTime};
+const filter = {
+  [FilterType.EVERYTHING]: (points) => points,
+  [FilterType.FUTURE]: (points) => points.filter((point) => point.dateFrom > dayjs())
+};
+
+export {getRandomInteger, humanizePointDueDate, humanizePointDueTime, filter};
