@@ -5,6 +5,8 @@ import NoPointView from '../view/no-point-view.js';
 import SortView from '../view/sort-view.js';
 import PointPresenter from './point-presenter.js';
 
+const POINTS_COUNT = 3;
+
 export default class TripPresenter {
   #tripContainer = null;
   #pointsModel = null;
@@ -16,6 +18,10 @@ export default class TripPresenter {
   #pointAddView = new PointAddView();
   #noPointComponent = new NoPointView();
   #sortComponent = new SortView();
+
+  // #renderedPointsCount = POINTS_COUNT;
+
+  #pointPresenter = new Map();
 
   constructor(tripEvents, pointsModel) {
     this.#tripContainer = tripEvents;
@@ -30,36 +36,49 @@ export default class TripPresenter {
     this.#renderTripEvents();
   };
 
+  #handleModeChange = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.resetView());
+  };
+
   #renderSort = () => {
     render(this.#sortComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
   };
 
   #renderPoint = (point, offers) => {
-    const pointPresenter = new PointPresenter(this.#pointListView.element);
+    const pointPresenter = new PointPresenter(this.#pointListView.element, this.#handleModeChange);
     pointPresenter.init(point, offers);
+    this.#pointPresenter.set(point.id, pointPresenter);
   };
 
-  #renderPointList = () => {
-    render(this.#pointListView, this.#tripContainer);
-  };
-
-  #renderPoints = () => {
-    this.#tripPoints.forEach((point) => this.#renderPoint(point, this.#tripOffers));
+  #renderPoints = (from, to) => {
+    this.#tripPoints
+      .slice(from, to)
+      .forEach((point) => this.#renderPoint(point, this.#tripOffers));
   };
 
   #renderNoPointView = () => {
     render(this.#noPointComponent, this.#tripContainer, RenderPosition.BEFOREEND);
   };
 
+  // #clearPointList = () => {
+  //   this.#pointPresenter.forEach((presenter) => presenter.destroy());
+  //   this.#pointPresenter.clear();
+  //   this.#renderedPointsCount = POINTS_COUNT;
+  // };
+
+  #renderPointList = () => {
+    render(this.#pointListView, this.#tripContainer);
+    this.#renderPoints(0, Math.min(this.#tripPoints.length, POINTS_COUNT));
+  };
+
   #renderTripEvents = () => {
     if (this.#tripPoints.length === 0) {
       this.#renderNoPointView();
-    } else {
-      this.#renderPointList();
-      this.#renderPoints();
+      return;
     }
 
     this.#renderSort();
+    this.#renderPointList();
   };
 }
 

@@ -2,6 +2,7 @@ import {EVENT_TYPES} from './const.js';
 import {getRandomInteger} from '../util.js';
 import {generateDestination} from './destination.js';
 import {generateOffer} from './offer.js';
+import {nanoid} from 'nanoid';
 
 const generateType = () => {
   const randomIndex = getRandomInteger(0, EVENT_TYPES.length - 1);
@@ -17,10 +18,10 @@ const generateOffersId = () => {
 
 export const generatePoint = () => ({
   basePrice: getRandomInteger(1000, 5000),
-  dateFrom: `2019-07-${getRandomInteger(10, 30)}T22:55:56.845Z`,
+  dateFrom: `2019-07-${getRandomInteger(1, 30)}T22:55:56.845Z`,
   dateTo: `2019-07-${getRandomInteger(10, 30)}T11:22:13.375Z`,
   destination: generateDestination(),
-  id: '0',
+  id: nanoid(),
   offers: generateOffersId(),
   type: generateType(),
 });
