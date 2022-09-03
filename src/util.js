@@ -9,11 +9,12 @@ const getRandomInteger = (a = 0, b = 1) => {
 };
 
 const humanizePointDueDate = (dueDate) => dayjs(dueDate.slice(0, dueDate.length - 1)).format('MMM D');
-const humanizePointDueTime = (dueTime) => dayjs(dueTime).format('HH:HH');
+const humanizePointEditDate = (dueDate) => dayjs(dueDate.slice(0, dueDate.length - 1)).format('DD/MM/YY');
+const humanizePointDueTime = (dueTime) => dayjs(dueTime.slice(0, dueTime.length - 1)).format('HH:HH');
 
 const filter = {
   [FilterType.EVERYTHING]: (points) => points,
   [FilterType.FUTURE]: (points) => points.filter((point) => point.dateFrom > dayjs())
 };
 
-export {getRandomInteger, humanizePointDueDate, humanizePointDueTime, filter};
+export {getRandomInteger, humanizePointDueDate, humanizePointDueTime, humanizePointEditDate, filter};

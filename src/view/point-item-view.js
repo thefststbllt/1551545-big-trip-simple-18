@@ -4,11 +4,13 @@ import {humanizePointDueDate, humanizePointDueTime} from '../util.js';
 const createNewPointItemTemplate = (point, offers) => {
   const {basePrice, dateFrom, dateTo, type, destination} = point;
 
+  const eventOffers = offers ? offers.shift().offers : '';
+
   const generatedOfferTemplate = (title, price) => `<li class="event__offer"><span class="event__offer-title">${title}</span> &plus;&euro;&nbsp;<span class="event__offer-price">${price}</span></li>`;
 
   //Creating an array and making a string out of it
   const finalOffers = [];
-  offers.forEach((item) => {
+  eventOffers.forEach((item) => {
     finalOffers.push(generatedOfferTemplate(item.title, item.price));
   });
   const stringOffers = finalOffers.join('');
@@ -38,9 +40,13 @@ const createNewPointItemTemplate = (point, offers) => {
   &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
   </p>
   <h4 class="visually-hidden">Offers:</h4>
+
+
   <ul class="event__selected-offers">
     ${stringOffers}
   </ul>
+
+
   <button class="event__rollup-btn" type="button">
   <span class="visually-hidden">Open event</span>
   </button>
@@ -50,14 +56,19 @@ const createNewPointItemTemplate = (point, offers) => {
 };
 
 export default class PointItemView extends AbstractView {
+  #point = null;
+  #offers = null;
+
   constructor(point, offers) {
     super();
-    this.point = point;
-    this.offers = offers;
+    this.#point = point;
+    this.#offers = offers;
   }
 
+  #rightTypes = (point, offers) => offers.filter((item) => item.type === point.type);
+
   get template() {
-    return createNewPointItemTemplate(this.point, this.offers);
+    return createNewPointItemTemplate(this.#point, this.#rightTypes(this.#point, this.#offers));
   }
 
   setClickHandler = (callback) => {

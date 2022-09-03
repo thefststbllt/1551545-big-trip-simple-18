@@ -1,11 +1,11 @@
-import {render, RenderPosition} from '../framework/render.js';
+import {render, RenderPosition, remove} from '../framework/render.js';
 import PointListView from '../view/point-list-view.js';
 import PointAddView from '../view/point-add-view.js';
 import NoPointView from '../view/no-point-view.js';
 import SortView from '../view/sort-view.js';
 import PointPresenter from './point-presenter.js';
 
-const POINTS_COUNT = 3;
+const POINTS_COUNT = 10;
 
 export default class TripPresenter {
   #tripContainer = null;
@@ -15,11 +15,10 @@ export default class TripPresenter {
   #tripOffers = [];
 
   #pointListView = new PointListView();
-  #pointAddView = new PointAddView();
   #noPointComponent = new NoPointView();
   #sortComponent = new SortView();
 
-  // #renderedPointsCount = POINTS_COUNT;
+  #pointAddComponent = null;
 
   #pointPresenter = new Map();
 
@@ -28,10 +27,14 @@ export default class TripPresenter {
     this.#pointsModel = pointsModel;
   }
 
-  init = () => {
+  init = (yellowButton) => {
     this.#tripPoints = this.#pointsModel.points;
     this.#tripOffers = this.#pointsModel.offers;
-    render(this.#pointAddView, this.#tripContainer);
+
+    this.#pointAddComponent = new PointAddView();
+
+    this.#pointAddComponent.setClickHandler(this.#renderPointAdd, yellowButton);
+    this.#pointAddComponent.setRemoveHandler(this.#handleRemoveClick);
 
     this.#renderTripEvents();
   };
@@ -44,27 +47,21 @@ export default class TripPresenter {
     render(this.#sortComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
   };
 
-  #renderPoint = (point, offers) => {
+  #renderPoint = (point) => {
     const pointPresenter = new PointPresenter(this.#pointListView.element, this.#handleModeChange);
-    pointPresenter.init(point, offers);
+    pointPresenter.init(point, this.#tripOffers);
     this.#pointPresenter.set(point.id, pointPresenter);
   };
 
   #renderPoints = (from, to) => {
     this.#tripPoints
       .slice(from, to)
-      .forEach((point) => this.#renderPoint(point, this.#tripOffers));
+      .forEach((point) => this.#renderPoint(point));
   };
 
   #renderNoPointView = () => {
     render(this.#noPointComponent, this.#tripContainer, RenderPosition.BEFOREEND);
   };
-
-  // #clearPointList = () => {
-  //   this.#pointPresenter.forEach((presenter) => presenter.destroy());
-  //   this.#pointPresenter.clear();
-  //   this.#renderedPointsCount = POINTS_COUNT;
-  // };
 
   #renderPointList = () => {
     render(this.#pointListView, this.#tripContainer);
@@ -79,6 +76,21 @@ export default class TripPresenter {
 
     this.#renderSort();
     this.#renderPointList();
+  };
+
+  //рендерим форму редактирования
+  #renderPointAdd = () => {
+    render(this.#pointAddComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
+  };
+
+  //удаляем форму редактирования
+  #removePointAddView = () => {
+    remove(this.#pointAddComponent);
+  };
+
+  //Хендлер для удаления формы редактирования
+  #handleRemoveClick = () => {
+    this.#removePointAddView();
   };
 }
 

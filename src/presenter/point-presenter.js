@@ -10,6 +10,7 @@ const Mode = {
 export default class PointPresenter {
   #pointListContainer = null;
   #point = null;
+  #offers = null;
   #mode = Mode.DEFAULT;
   #changeMode = null;
 
@@ -23,15 +24,15 @@ export default class PointPresenter {
 
   init = (point, offers) => {
     this.#point = point;
+    this.#offers = offers;
 
     const prevPointComponent = this.#pointItemComponent;
     const prevPointEditComponent = this.#pointEditComponent;
 
-    this.#pointItemComponent = new PointItemView(point, offers);
-    this.#pointEditComponent = new PointEditView();
+    this.#pointItemComponent = new PointItemView(point, this.#offers);
+    this.#pointEditComponent = new PointEditView(point, this.#offers);
     this.#pointItemComponent.setClickHandler(this.#handleEditClick);
     this.#pointEditComponent.setClickHandler(this.#handleFormSubmit);
-
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this.#pointItemComponent, this.#pointListContainer);
       return;
@@ -47,7 +48,6 @@ export default class PointPresenter {
 
     remove(prevPointComponent);
     remove(prevPointEditComponent);
-
   };
 
   destroy = () => {
