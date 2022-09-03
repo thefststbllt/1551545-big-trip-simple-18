@@ -8,7 +8,7 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-const humanizePointDueDate = (dueDate) => dayjs(dueDate).format('MMM D');
+const humanizePointDueDate = (dueDate) => dayjs(dueDate.slice(0, dueDate.length - 1)).format('MMM D');
 const humanizePointDueTime = (dueTime) => dayjs(dueTime).format('HH:HH');
 
 const filter = {
