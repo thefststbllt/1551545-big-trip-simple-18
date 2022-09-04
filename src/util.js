@@ -8,12 +8,40 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-const humanizePointDueDate = (dueDate) => dayjs(dueDate.slice(0, dueDate.length - 1)).format('MMM D');
-const humanizePointDueTime = (dueTime) => dayjs(dueTime).format('HH:HH');
+const humanizePointDueDate = (dueDate) => dayjs(dueDate).format('MMM D');
+const humanizePointEditDate = (dueDate) => dayjs(dueDate.slice(0, dueDate.length - 1)).format('DD/MM/YY');
+const humanizePointDueTime = (dueTime) => dayjs(dueTime.slice(0, dueTime.length - 1)).format('HH:HH');
 
 const filter = {
   [FilterType.EVERYTHING]: (points) => points,
   [FilterType.FUTURE]: (points) => points.filter((point) => point.dateFrom > dayjs())
 };
 
-export {getRandomInteger, humanizePointDueDate, humanizePointDueTime, filter};
+const updateItem = (items, update) => {
+  const index = items.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    update,
+    ...items.slice(index + 1),
+  ];
+};
+
+const sortPointsByDay = (pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
+
+const sortPointsByPrice = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
+
+export {
+  getRandomInteger,
+  humanizePointDueDate,
+  humanizePointDueTime,
+  humanizePointEditDate,
+  filter,
+  sortPointsByPrice,
+  sortPointsByDay,
+  updateItem
+};
