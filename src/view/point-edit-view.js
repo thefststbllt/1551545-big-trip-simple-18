@@ -148,19 +148,18 @@ export default class PointEditView extends AbstractView {
 
   #rightTypes = (point, offers) => offers.filter((item) => item.type === point.type);
 
-
   get template() {
     return createNewEditTemplate(this.#point, this.#rightTypes(this.#point, this.#offers));
   }
 
-  setClickHandler = (callback) => {
-    this._callback.click = callback;
+  setEditClickHandler = (callback) => {
+    this._callback.editClick = callback;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
   };
 
   #clickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.editClick();
   };
 
   setFormSubmitHandler = (callback) => {

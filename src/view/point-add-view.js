@@ -167,13 +167,13 @@ export default class PointAddView extends AbstractView {
   }
 
   setClickHandler = (callback, button) => {
-    this._callback.click = callback;
+    this._callback.removeClick = callback;
     button.addEventListener('click', this.#clickHandler);
   };
 
   #clickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.removeClick();
   };
 
   setRemoveHandler = (callback) => {

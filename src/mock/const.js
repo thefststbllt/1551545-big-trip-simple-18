@@ -37,9 +37,8 @@ const FilterType = {
 };
 
 const SortType = {
-  DEFAULT: 'default',
-  DATE_DOWN: 'date-down',
-  DATE_UP: 'date-up'
+  DAY: 'day',
+  PRICE: 'price'
 };
 
 export {CITIES_COLLECTION, DESCRIPTIONS, OFFER_TITLES, OFFER_IDS, OFFER_PRICES, EVENT_TYPES, FilterType, SortType};
