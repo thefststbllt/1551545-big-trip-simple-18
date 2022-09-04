@@ -36,4 +36,10 @@ const FilterType = {
   FUTURE: 'future'
 };
 
-export {CITIES_COLLECTION, DESCRIPTIONS, OFFER_TITLES, OFFER_IDS, OFFER_PRICES, EVENT_TYPES, FilterType};
+const SortType = {
+  DEFAULT: 'default',
+  DATE_DOWN: 'date-down',
+  DATE_UP: 'date-up'
+};
+
+export {CITIES_COLLECTION, DESCRIPTIONS, OFFER_TITLES, OFFER_IDS, OFFER_PRICES, EVENT_TYPES, FilterType, SortType};
