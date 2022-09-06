@@ -6,6 +6,7 @@ import SortView from '../view/sort-view.js';
 import PointPresenter from './point-presenter.js';
 import {sortPointsByPrice, sortPointsByDay, updateItem} from '../util.js';
 import {SortType} from '../mock/const.js';
+import {yellowButton} from '../main.js';
 
 const POINTS_COUNT = 10;
 
@@ -31,16 +32,16 @@ export default class TripPresenter {
     this.#pointsModel = pointsModel;
   }
 
-  init = (yellowButton) => {
+  init = () => {
     this.#tripPoints = [...this.#pointsModel.points];
 
     this.#sourcedBoardPoints = [...this.#pointsModel.points];
     this.#tripOffers = this.#pointsModel.offers;
 
-    this.#pointAddComponent = new PointAddView();
+    this.#pointAddComponent = new PointAddView(yellowButton, this.#handleDestroyPointAddClick);
 
-    this.#pointAddComponent.setClickHandler(this.#renderPointAdd, yellowButton);
-    this.#pointAddComponent.setRemoveHandler(this.#handleRemoveClick);
+    this.#pointAddComponent.setPointAddHandler(this.#renderPointAdd);
+    this.#pointAddComponent.setDestroyPointAddHandler(this.#handleDestroyPointAddClick);
 
     this.#renderTripEvents();
     this.#renderSort();
@@ -139,7 +140,7 @@ export default class TripPresenter {
   };
 
   //Хендлер для удаления формы редактирования
-  #handleRemoveClick = () => {
+  #handleDestroyPointAddClick = () => {
     this.#removePointAddView();
   };
 }

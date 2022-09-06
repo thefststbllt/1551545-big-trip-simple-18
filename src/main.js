@@ -16,4 +16,6 @@ const filters = generateFilter(pointsModel.points);
 
 render(new ListFilterView(filters), tripMainFilters, RenderPosition.BEFOREBEGIN);
 
-tripPresenter.init(yellowButton);
+tripPresenter.init();
+
+export {yellowButton};

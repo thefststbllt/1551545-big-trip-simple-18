@@ -1,4 +1,4 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {humanizePointEditDate, humanizePointDueTime} from '../util.js';
 
 const createNewEditTemplate = (point, offers) => {
@@ -136,20 +136,19 @@ const createNewEditTemplate = (point, offers) => {
                   </form>`);
 };
 
-export default class PointEditView extends AbstractView {
-  #point = null;
+export default class PointEditView extends AbstractStatefulView {
   #offers = null;
 
   constructor(point, offers) {
     super();
-    this.#point = point;
+    this._state = point;
     this.#offers = offers;
   }
 
   #rightTypes = (point, offers) => offers.filter((item) => item.type === point.type);
 
   get template() {
-    return createNewEditTemplate(this.#point, this.#rightTypes(this.#point, this.#offers));
+    return createNewEditTemplate(this._state, this.#rightTypes(this._state, this.#offers));
   }
 
   setEditClickHandler = (callback) => {

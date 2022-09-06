@@ -162,13 +162,20 @@ const createNewPointTemplate = () => (`<form class="event event--edit" action="#
                 </form>`);
 
 export default class PointAddView extends AbstractView {
+
+  constructor(button, removeButtonCallback) {
+    super();
+    this.pointAddButton = button;
+    this._callback.getRidOf = removeButtonCallback;
+  }
+
   get template() {
     return createNewPointTemplate();
   }
 
-  setClickHandler = (callback, button) => {
+  setPointAddHandler = (callback) => {
     this._callback.removeClick = callback;
-    button.addEventListener('click', this.#clickHandler);
+    this.pointAddButton.addEventListener('click', this.#clickHandler);
   };
 
   #clickHandler = (evt) => {
@@ -176,8 +183,7 @@ export default class PointAddView extends AbstractView {
     this._callback.removeClick();
   };
 
-  setRemoveHandler = (callback) => {
-    this._callback.getRidOf = callback;
+  setDestroyPointAddHandler = () => {
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#removeHandler);
   };
 
