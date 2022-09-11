@@ -16,6 +16,9 @@ export default class TripPresenter {
 
   #tripPoints = [];
   #tripOffers = [];
+  #tripDestinations = [];
+
+  #currentSortType = null;
 
   #pointListComponent = new PointListView();
   #noPointComponent = new NoPointView();
@@ -24,7 +27,6 @@ export default class TripPresenter {
   #pointAddComponent = null;
 
   #pointPresenter = new Map();
-  #currentSortType = null;
   #sourcedBoardPoints = [];
 
   constructor(tripEvents, pointsModel) {
@@ -33,15 +35,15 @@ export default class TripPresenter {
   }
 
   init = () => {
-    this.#tripPoints = [...this.#pointsModel.points];
+    this.#tripPoints = this.#pointsModel.points;
+    this.#tripOffers = this.#pointsModel.offers;
+    this.#tripDestinations = this.#pointsModel.destinations;
 
     this.#sourcedBoardPoints = [...this.#pointsModel.points];
-    this.#tripOffers = this.#pointsModel.offers;
 
-    this.#pointAddComponent = new PointAddView(yellowButton, this.#handleDestroyPointAddClick);
-
-    this.#pointAddComponent.setPointAddHandler(this.#renderPointAdd);
-    this.#pointAddComponent.setDestroyPointAddHandler(this.#handleDestroyPointAddClick);
+    this.#pointAddComponent = new PointAddView(this.#renderPointAdd, this.#handleDestroyPointAddClick);
+    this.#pointAddComponent.setPointAddHandler(yellowButton);
+    this.#pointAddComponent.setDestroyPointAddHandler();
 
     this.#renderTripEvents();
     this.#renderSort();
@@ -73,12 +75,12 @@ export default class TripPresenter {
     this.#currentSortType = sortType;
   };
 
-  //Хендлер для сортировки
   #handlerSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
     this.#sortPoints(sortType);
+    this.#removeSortList();
     this.#clearPointList();
     this.#renderPointList();
   };
@@ -88,9 +90,13 @@ export default class TripPresenter {
     this.#sortComponent.setSortTypeChangeHandler(this.#handlerSortTypeChange);
   };
 
+  #removeSortList = () => {
+    remove(this.#pointListComponent);
+  };
+
   #renderPoint = (point) => {
     const pointPresenter = new PointPresenter(this.#pointListComponent.element, this.#handlePointChange, this.#handleModeChange);
-    pointPresenter.init(point, this.#tripOffers);
+    pointPresenter.init(point, this.#tripOffers, this.#tripDestinations);
     this.#pointPresenter.set(point.id, pointPresenter);
   };
 
@@ -129,17 +135,14 @@ export default class TripPresenter {
     this.#renderPointList();
   };
 
-  //рендерим форму редактирования
   #renderPointAdd = () => {
     render(this.#pointAddComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
   };
 
-  //удаляем форму редактирования
   #removePointAddView = () => {
     remove(this.#pointAddComponent);
   };
 
-  //Хендлер для удаления формы редактирования
   #handleDestroyPointAddClick = () => {
     this.#removePointAddView();
   };
