@@ -31,13 +31,13 @@ const createEventTypeTemplate = (types, type) => {
 const createNewEditTemplate = (point, offers, destinations) => {
   const {type, destination, dateFrom, dateTo, basePrice} = point;
 
-  const currentDestination = destinations.find((item) => item.id === destination);
+  const currentDestination = destinations.find((item) => item.id === destination || item.name === destination);
   const {name, description, pictures} = currentDestination;
 
   const rightTypes = offers.find((item) => item.type === point.type);
   const rightTypeOffers = rightTypes.offers;
 
-  // Offer-checkboxes generation
+  // Offer-checkboxes generating
   const offersComponent = rightTypeOffers.map((offer) => {
     const checked = (point.offers.includes(offer.id)) ? 'checked' : '';
     return `<div class="event__offer-selector">
