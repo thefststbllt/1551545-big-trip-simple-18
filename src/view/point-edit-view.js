@@ -1,5 +1,7 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {humanizePointEditDate, humanizePointDueTime} from '../util.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
 const createTypeTemplate = (type, checked) => `<div class="event__type-item">
     <input id="event-type-${type}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${type}" ${checked ? 'checked' : ''}>
@@ -75,57 +77,59 @@ const createNewEditTemplate = (point, offers, destinations) => {
   const endTime = dateTo ? humanizePointDueTime(dateTo) : '';
 
   return `<li class="trip-events__item">
-<form class="event event--edit" action="#" method="post">
-                    <header class="event__header">
-                      ${createEventTypeTemplate(typesOfEvents, type)}
-                      ${createEventDestinationTemplate(namesOfDestinations, type)}
-                      <div class="event__field-group  event__field-group--time">
-                        <label class="visually-hidden" for="event-start-time-1">From</label>
-                        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${slashDateFrom} ${startTime}">
-                        &mdash;
-                        <label class="visually-hidden" for="event-end-time-1">To</label>
-                        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${slashDateTo} ${endTime}">
+            <form class="event event--edit" action="#" method="post">
+               <header class="event__header">
+                 ${createEventTypeTemplate(typesOfEvents, type)}
+                 ${createEventDestinationTemplate(namesOfDestinations, type)}
+                 <div class="event__field-group  event__field-group--time">
+                   <label class="visually-hidden" for="event-start-time-1">From</label>
+                   <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${slashDateFrom} ${startTime}">
+                   &mdash;
+                   <label class="visually-hidden" for="event-end-time-1">To</label>
+                   <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${slashDateTo} ${endTime}">
+                 </div>
+
+                 <div class="event__field-group  event__field-group--price">
+                   <label class="event__label" for="event-price-1">
+                     <span class="visually-hidden">Price</span>
+                     &euro;
+                   </label>
+                   <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+                 </div>
+
+                 <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+                 <button class="event__reset-btn" type="reset">Delete</button>
+                 <button class="event__rollup-btn" type="button">
+                   <span class="visually-hidden">Open event</span>
+                 </button>
+               </header>
+               <section class="event__details">
+                 <section class="event__section  event__section--offers">
+                   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+                   <div class="event__available-offers">
+                       ${offersComponent}
+                   </div>
+                 </section>
+
+                 <section class="event__section  event__section--destination">
+                   <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+                   <p class="event__destination-description">${description}</p>
+                   <div class="event__photos-container">
+                      <div class="event__photos-tape">
+                      ${currentPicturesComponent}
                       </div>
-
-                      <div class="event__field-group  event__field-group--price">
-                        <label class="event__label" for="event-price-1">
-                          <span class="visually-hidden">Price</span>
-                          &euro;
-                        </label>
-                        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
-                      </div>
-
-                      <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                      <button class="event__reset-btn" type="reset">Delete</button>
-                      <button class="event__rollup-btn" type="button">
-                        <span class="visually-hidden">Open event</span>
-                      </button>
-                    </header>
-                    <section class="event__details">
-                      <section class="event__section  event__section--offers">
-                        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-                        <div class="event__available-offers">
-                            ${offersComponent}
-                        </div>
-                      </section>
-
-                      <section class="event__section  event__section--destination">
-                        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                        <p class="event__destination-description">${description}</p>
-                        <div class="event__photos-container">
-                           <div class="event__photos-tape">
-                           ${currentPicturesComponent}
-                           </div>
-                        </div>
-                      </section>
-                    </section>
-                  </form>
-</li>`;
+                   </div>
+                 </section>
+               </section>
+             </form>
+           </li>`;
 };
 
 export default class PointEditView extends AbstractStatefulView {
   #offers = null;
   #destinations = null;
+  #datepickerStart = null;
+  #datepickerEnd = null;
 
   constructor(point, offers, destinations) {
     super();
@@ -140,9 +144,62 @@ export default class PointEditView extends AbstractStatefulView {
     return createNewEditTemplate(this._state, this.#offers, this.#destinations);
   }
 
-  static parsePointToState = (point) => ({
-    ...point,
-  });
+  removeElement() {
+    super.removeElement();
+    if (this.#datepickerStart) {
+      this.#datepickerEnd = null;
+    }
+    if (this.#datepickerEnd) {
+      this.#datepickerStart = null;
+    }
+  }
+
+  #setDateStartPicker = () => {
+    if (this._state.dateFrom) {
+      this.#datepickerStart = flatpickr(
+        this.element.querySelector('#event-start-time-1'),
+        {
+          enableTime: true,
+          dateFormat: 'd/m/y / h:i',
+          defaultDate: this._state.dateFrom,
+          onChange: this.#dueDateStartChangeHandler
+        }
+      );
+    }
+  };
+
+  #setDateEndPicker = () => {
+    if (this._state.dateTo) {
+      this.#datepickerEnd = flatpickr(
+        this.element.querySelector('#event-end-time-1'),
+        {
+          enableTime: true,
+          dateFormat: 'd/m/y / h:i',
+          defaultDate: this._state.dateTo,
+          onChange: this.#dueDateEndChangeHandler,
+        }
+      );
+    }
+  };
+
+  #dueDateStartChangeHandler = (dateFrom) => {
+    this.updateElement({
+      dateFrom
+    });
+  };
+
+  #dueDateEndChangeHandler = (dateTo) => {
+    this.updateElement({
+      dateTo
+    });
+  };
+
+  #setDatePicker = () => {
+    this.#setDateStartPicker();
+    this.#setDateEndPicker();
+  };
+
+  static parsePointToState = (point) => ({...point});
 
   static parseStateToPoint = (state) => ({...state});
 
@@ -157,6 +214,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.element.querySelector('.event__input--price').addEventListener('input', this.#priceInputHandler);
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
     this.element.addEventListener('submit', this.#formSubmitHandler);
+    this.#setDatePicker();
   };
 
   #eventTypeToggleHandler = (evt) => {
@@ -209,5 +267,6 @@ export default class PointEditView extends AbstractStatefulView {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setEditClickHandler(this._callback.editClick);
+    this.#setDatePicker();
   };
 }

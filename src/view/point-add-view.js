@@ -162,6 +162,8 @@ const createNewPointTemplate = () => (`<form class="event event--edit" action="#
                 </form>`);
 
 export default class PointAddView extends AbstractView {
+  #buttonAddPoint = null;
+
   constructor(createPointAdd, removePointAdd) {
     super();
     this._callback.getRidOf = removePointAdd;
@@ -173,12 +175,14 @@ export default class PointAddView extends AbstractView {
   }
 
   setPointAddHandler = (button) => {
-    button.addEventListener('click', this.#clickHandler);
+    this.#buttonAddPoint = button;
+    this.#buttonAddPoint.addEventListener('click', this.#clickHandler);
   };
 
   #clickHandler = (evt) => {
     evt.preventDefault();
     this._callback.createPointAdd();
+    this.#buttonAddPoint.disabled = true;
   };
 
   setDestroyPointAddHandler = () => {
@@ -189,6 +193,6 @@ export default class PointAddView extends AbstractView {
   #removePointAddHandler = (evt) => {
     evt.preventDefault();
     this._callback.getRidOf();
+    this.#buttonAddPoint.disabled = false;
   };
-
 }
