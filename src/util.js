@@ -10,7 +10,7 @@ const getRandomInteger = (a = 0, b = 1) => {
 
 const humanizePointDueDate = (dueDate) => dayjs(dueDate).format('MMM D');
 const humanizePointEditDate = (dueDate) => dayjs(dueDate.slice(0, dueDate.length - 1)).format('DD/MM/YY');
-const humanizePointDueTime = (dueTime) => dayjs(dueTime.slice(0, dueTime.length - 1)).format('HH:HH');
+const humanizePointDueTime = (dueTime) => dayjs(dueTime.slice(0, dueTime.length - 1)).format('hh:mm');
 
 const filter = {
   [FilterType.EVERYTHING]: (points) => points,
