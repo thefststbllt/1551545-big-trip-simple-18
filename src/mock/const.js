@@ -19,18 +19,6 @@ const DESCRIPTIONS = [
 
 const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
-const OFFER_TITLES = [
-  'Upgrade to a business class',
-  'Order a taxi',
-  'Business lounge',
-  'Choose the check-in time',
-  'Entertainment for kids'
-];
-
-const OFFER_IDS = ['1', '2', '3', '4', '5'];
-
-const OFFER_PRICES = ['100', '200', '150', '120', '170'];
-
 const FilterType = {
   EVERYTHING: 'everything',
   FUTURE: 'future'
@@ -41,4 +29,4 @@ const SortType = {
   PRICE: 'price'
 };
 
-export {CITIES_COLLECTION, DESCRIPTIONS, OFFER_TITLES, OFFER_IDS, OFFER_PRICES, EVENT_TYPES, FilterType, SortType};
+export {CITIES_COLLECTION, DESCRIPTIONS, EVENT_TYPES, FilterType, SortType};

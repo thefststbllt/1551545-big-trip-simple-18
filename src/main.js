@@ -11,9 +11,10 @@ const tripEvents = mainElement.querySelector('.trip-events');
 const pointsModel = new PointsModel();
 const yellowButton = document.querySelector('.trip-main__event-add-btn');
 const tripPresenter = new TripPresenter(tripEvents, pointsModel);
-
 const filters = generateFilter(pointsModel.points);
 
 render(new ListFilterView(filters), tripMainFilters, RenderPosition.BEFOREBEGIN);
 
-tripPresenter.init(yellowButton);
+tripPresenter.init();
+
+export {yellowButton};
