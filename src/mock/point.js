@@ -13,15 +13,14 @@ const generateOffersId = () => {
   return commonOffersId.slice(0, getRandomInteger(0, commonOffersId.length - 1));
 };
 
-//Temporary deleted 'Z' in the end of dateFrom string, got no thoughts about how to cut it off if it'd be remote data
+const getDateTime = (time) => time > 9 ? time.toString() : `0${time}`;
+
 export const generatePoint = () => ({
   pointId: nanoid(),
   type: generateType(),
-  dateFrom: `2019-07-${getRandomInteger(1, 30)}T${getRandomInteger(0,24)}:${getRandomInteger(0,60)}:${getRandomInteger(0,60)}.845`,
-  dateTo: `2019-07-${getRandomInteger(10, 30)}T${getRandomInteger(0,24)}:${getRandomInteger(0,60)}:${getRandomInteger(0,60)}.375Z`,
+  dateFrom: `2022-${getDateTime(getRandomInteger(1, 12))}-${getDateTime(getRandomInteger(1, 30))}T${getDateTime(getRandomInteger(0,23))}:${getDateTime(getRandomInteger(0, 59))}:${getDateTime(getRandomInteger(0, 59))}.845Z`,
+  dateTo: `2022-${getDateTime(getRandomInteger(1, 12))}-${getDateTime(getRandomInteger(1, 30))}T${getDateTime(getRandomInteger(0,23))}:${getDateTime(getRandomInteger(0, 59))}:${getDateTime(getRandomInteger(0, 59))}.375Z`,
   destination: getRandomInteger(1, 28),
   basePrice: getRandomInteger(1000, 5000),
   offers: generateOffersId(),
 });
-
-
