@@ -4,7 +4,7 @@ import {FILTER_TYPE} from '../mock/const.js';
 const NoPointsTextType = {
   [FILTER_TYPE.everything]: 'Click New Event to create your first point',
   [FILTER_TYPE.future]: 'There are no future events now',
-  [FILTER_TYPE.past]: 'There are no events in the past for now'
+  [FILTER_TYPE.past]: 'There are no past events now'
 };
 
 const createNoPointTemplate = (filterType) => {
