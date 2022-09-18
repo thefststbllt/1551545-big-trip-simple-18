@@ -1,9 +1,10 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {humanizePointDueDate, humanizePointDueTime} from '../util.js';
+import he from 'he';
 
 const createNewPointItemTemplate = (point, offers, destinations) => {
   const {basePrice, dateFrom, dateTo, type, destination} = point;
-  const correctDestination = destinations.find((item) => item.id === destination);
+  const correctDestination = destinations.find((item) => item.id === destination || item.name === destination);
   const {name} = correctDestination;
 
   const rightTypes = offers.filter((item) => item.type === point.type).shift();
@@ -17,10 +18,9 @@ const createNewPointItemTemplate = (point, offers, destinations) => {
 
   const generatedOfferTemplate = rightTypeOffers.map((offer) => point.offers.includes(offer.id) ? getOfferTemplate(offer) : '');
 
-  //Creating an array and making a string out of it
   const stringSelectedOffers = generatedOfferTemplate.join('');
+  const stringifiedPrice = basePrice.toString();
 
-  //Date/Time section
   const eventDate = dateFrom ? humanizePointDueDate(dateFrom) : '';
   const endTime = dateTo ? humanizePointDueTime(dateTo) : '';
   const startTime = dateFrom ? humanizePointDueTime(dateFrom) : '';
@@ -38,7 +38,7 @@ const createNewPointItemTemplate = (point, offers, destinations) => {
                     <time class="event__start-time" datetime="2019-03-18T10:30">${startTime}</time>&mdash;<time class="event__end-time" datetime="2019-03-18T11:00">${endTime}</time>
                 </p>
             </div>
-            <p class="event__price">&euro;&nbsp;<span class="event__price-value">${basePrice}</span></p>
+            <p class="event__price">&euro;&nbsp;<span class="event__price-value">${he.encode(stringifiedPrice)}</span></p>
             <h4 class="visually-hidden">Offers:</h4>
             <ul class="event__selected-offers">
                 ${stringSelectedOffers}

@@ -1,32 +1,27 @@
-const CITIES_COLLECTION = [
-  'Saint-Petersburg',
-  'Los-Angeles',
-  'Tokyo',
-  'Paris',
-  'Moscow',
-  'Rome',
-  'Helsinki',
-  'Riodežaneiro',
-];
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
 
-const DESCRIPTIONS = [
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-  'Cras aliquet varius magna, non porta ligula feugiat eget.',
-  'Fusce tristique felis at fermentum pharetra.',
-  'Aliquam id orci ut lectus varius viverra.',
-  'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.'
-];
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
 
 const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
-const FilterType = {
-  EVERYTHING: 'everything',
-  FUTURE: 'future'
+const FILTER_TYPE = {
+  everything: 'everything',
+  future: 'future',
+  past: 'past'
 };
 
 const SortType = {
   DAY: 'day',
-  PRICE: 'price'
+  PRICE: 'price',
+  TIME: 'time'
 };
 
-export {CITIES_COLLECTION, DESCRIPTIONS, EVENT_TYPES, FilterType, SortType};
+export {UserAction, UpdateType, EVENT_TYPES, FILTER_TYPE, SortType};

@@ -1,20 +1,16 @@
-import ListFilterView from './view/list-filter-view.js';
-import {render, RenderPosition} from './framework/render.js';
 import TripPresenter from './presenter/trip-presenter.js';
+import FilterPresenter from './presenter/filter-presenter.js';
+
 import PointsModel from './model/points-model.js';
-import {generateFilter} from './mock/filter.js';
+import FilterModel from './model/filter-model.js';
 
 const tripMainElement = document.querySelector('.trip-main');
-const tripMainFilters = tripMainElement.querySelector('.trip-controls__filters');
-const mainElement = document.querySelector('main');
-const tripEvents = mainElement.querySelector('.trip-events');
+const filtersContainer = tripMainElement.querySelector('.trip-controls__filters');
+const tripContainer = document.querySelector('.trip-events');
 const pointsModel = new PointsModel();
-const yellowButton = document.querySelector('.trip-main__event-add-btn');
-const tripPresenter = new TripPresenter(tripEvents, pointsModel);
-const filters = generateFilter(pointsModel.points);
-
-render(new ListFilterView(filters), tripMainFilters, RenderPosition.BEFOREBEGIN);
+const filterModel = new FilterModel();
+const tripPresenter = new TripPresenter(tripContainer, pointsModel, filterModel ,tripMainElement);
+const filterPresenter = new FilterPresenter(filtersContainer, filterModel, pointsModel);
 
 tripPresenter.init();
-
-export {yellowButton};
+filterPresenter.init();
