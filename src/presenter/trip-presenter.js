@@ -82,7 +82,6 @@ export default class TripPresenter {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointsModel.updatePoint(updateType, update);
-        // this.#renderSort();
         break;
       case UserAction.ADD_POINT:
         this.#pointsModel.addPoint(updateType, update);
