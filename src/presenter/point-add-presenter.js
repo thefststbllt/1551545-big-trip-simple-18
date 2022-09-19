@@ -2,6 +2,7 @@ import {render, remove, RenderPosition} from '../framework/render.js';
 import PointEditView from '../view/point-edit-view.js';
 import {UserAction, UpdateType} from '../mock/const.js';
 import {nanoid} from 'nanoid';
+import {isEscPressed} from '../util.js';
 
 export default class PointAddPresenter {
   #pointListContainer = null;
@@ -57,7 +58,7 @@ export default class PointAddPresenter {
   };
 
   #onEscKeyDownHandler = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (isEscPressed(evt)) {
       evt.preventDefault();
       this.destroy();
     }

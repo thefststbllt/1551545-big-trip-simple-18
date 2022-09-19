@@ -1,5 +1,5 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import {humanizePointEditDate, humanizePointDueTime} from '../util.js';
+import {humanizePointEditDate, humanizePointDueTime, templateCurrentTime} from '../util.js';
 import dayjs from 'dayjs';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
@@ -9,8 +9,8 @@ import he from 'he';
 
 const BLANC_EVENT = {
   price: null,
-  dateFrom: null,
-  dateTo: null,
+  dateFrom: templateCurrentTime(),
+  dateTo: templateCurrentTime(),
   destination: null,
   offers: [],
   type: null,
@@ -24,7 +24,7 @@ const createTypeTemplate = (type, checked) => `<div class="event__type-item">
 
 const createEventTypeTemplate = (types, type) => {
   const typesTemplate = types.map((item) => createTypeTemplate(item, item === type)).join('');
-  const icon = type ? `<img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">` : '';
+  const icon = `<img class="event__type-icon" width="17" height="17" src="img/icons/${type ? type : 'question-mark'}.png" alt="Event type icon">`;
 
   return (
     `<div class="event__type-wrapper">
@@ -67,7 +67,7 @@ const createNewEditTemplate = (point) => {
 
     return `<div class="event__field-group event__field-group--destination">
       <label class="event__label event__type-output" for="event-destination-1">${eventType ? eventType : ''}</label>
-      <input class="event__input event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination ? currentDestination.name : ''}" list="destination-list-1" onkeyup="this.value=''">
+      <input class="event__input event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination ? currentDestination.name : ''}" list="destination-list-1" required>
       <datalist id="destination-list-1">
         ${optionsTemplate}
       </datalist>
@@ -244,6 +244,10 @@ export default class PointEditView extends AbstractStatefulView {
 
   #eventDestinationInputHandler = (evt) => {
     evt.preventDefault();
+    const cities = destinations.map(({name}) => name);
+    if (!cities.includes(evt.target.value)) {
+      throw evt.target.value = 'Use the list please';
+    }
     if (evt.target.value) {
       this.updateElement({
         destination: evt.target.value,

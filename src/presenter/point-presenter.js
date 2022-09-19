@@ -2,6 +2,7 @@ import {render, replace, remove} from '../framework/render.js';
 import PointItemView from '../view/point-item-view.js';
 import PointEditView from '../view/point-edit-view.js';
 import {UserAction, UpdateType} from '../mock/const.js';
+import {isEscPressed} from '../util.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -85,7 +86,7 @@ export default class PointPresenter {
   };
 
   #onEscKeyDownHandler = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (isEscPressed(evt)) {
       evt.preventDefault();
       this.#replaceFormToPoint();
       document.removeEventListener('keydown', this.#onEscKeyDownHandler);
