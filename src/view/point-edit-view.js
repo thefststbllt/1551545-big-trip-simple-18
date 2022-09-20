@@ -17,6 +17,8 @@ const BLANC_EVENT = {
   basePrice: '',
 };
 
+const cities = destinations.map(({name}) => name);
+
 const createTypeTemplate = (type, checked) => `<div class="event__type-item">
     <input id="event-type-${type}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${type}" ${checked ? 'checked' : ''}>
     <label class="event__type-label event__type-label--${type}" for="event-type-${type}">${type}</label>
@@ -244,17 +246,16 @@ export default class PointEditView extends AbstractStatefulView {
 
   #eventDestinationInputHandler = (evt) => {
     evt.preventDefault();
-    const cities = destinations.map(({name}) => name);
-    if (!cities.includes(evt.target.value)) {
-      throw evt.target.value = 'Use the list please';
-    }
-    if (evt.target.value) {
+    if (cities.includes(evt.target.value)) {
       this.updateElement({
         destination: evt.target.value,
         destinations: [],
       });
+    } else {
+      evt.target.value = 'Use the list please';
     }
   };
+
 
   #priceInputHandler = (evt) => {
     evt.preventDefault();
@@ -280,7 +281,10 @@ export default class PointEditView extends AbstractStatefulView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit(PointEditView.parseStateToPoint(this._state));
+    const destinationValue = this.element.querySelector('.event__input--destination').value;
+    if (cities.includes(destinationValue)) {
+      this._callback.formSubmit(PointEditView.parseStateToPoint(this._state));
+    }
   };
 
   setDeleteClickHandler = (callback) => {
