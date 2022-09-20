@@ -17,3 +17,6 @@ const filterPresenter = new FilterPresenter(filtersContainer, filterModel, point
 
 tripPresenter.init();
 filterPresenter.init();
+
+
+console.log(new Date("2022-09-17T16:38:38.923Z"))

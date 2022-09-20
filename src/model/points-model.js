@@ -15,7 +15,7 @@ export default class PointsModel extends Observable {
     this.#pointsApiService = pointsApiService;
 
     this.#pointsApiService.points.then((points) => {
-      console.log(points)
+      console.log(points.map(this.#adaptToClient), points.map(point => point))
       //
     })
   }
@@ -60,6 +60,21 @@ export default class PointsModel extends Observable {
 
     this._notify(updateType, update);
   };
+
+  #adaptToClient = (point) => {
+    const adaptedPoint = {
+      ...point,
+      basePrice: point['base_price'],
+      dateTo: point['date_to'] !== null ? new Date(point['date_to']) : point['date_to'],
+      dateFrom: point['date_from'] !== null ? new Date(point['date_from']) : point['date_from']
+    };
+
+    delete adaptedPoint['base_price'];
+    delete adaptedPoint['date_to'];
+    delete adaptedPoint['date_from'];
+
+    return adaptedPoint;
+  }
 }
 
 
