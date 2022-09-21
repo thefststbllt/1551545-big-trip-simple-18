@@ -3,8 +3,6 @@ import {humanizePointEditDate, humanizePointDueTime, templateCurrentTime} from '
 import dayjs from 'dayjs';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import {destinations} from '../mock/destinations.js';
-import {offersCollection} from '../mock/offer.js';
 import he from 'he';
 
 const BLANC_EVENT = {
@@ -16,8 +14,6 @@ const BLANC_EVENT = {
   type: null,
   basePrice: '',
 };
-
-const cities = destinations.map(({name}) => name);
 
 const createTypeTemplate = (type, checked) => `<div class="event__type-item">
     <input id="event-type-${type}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${type}" ${checked ? 'checked' : ''}>
@@ -45,7 +41,7 @@ const createEventTypeTemplate = (types, type) => {
   );
 };
 
-const createNewEditTemplate = (point) => {
+const createNewEditTemplate = (point, offersCollection, destinations) => {
   const {type, destination, dateFrom, dateTo, basePrice, offers} = point;
   const rightType = offersCollection.find((item) => item.type === type);
   const rightTypeOffers = rightType ? rightType.offers : '';
@@ -62,14 +58,14 @@ const createNewEditTemplate = (point) => {
       </div>`;
   }).join('') : '';
 
-  const currentDestination = destinations.find((item) => item.id === destination || item.name === destination);
+  const currentDestination = destinations.find((item) => item.id === destination);
   const createEventDestinationTemplate = (eventType) => {
 
     const optionsTemplate = destinations.map(({name}) => `<option value="${name}"></option>`).join('');
 
     return `<div class="event__field-group event__field-group--destination">
       <label class="event__label event__type-output" for="event-destination-1">${eventType ? eventType : ''}</label>
-      <input class="event__input event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination ? currentDestination.name : ''}" list="destination-list-1" required>
+      <input class="event__input event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentDestination ? currentDestination.name : ''}" list="destination-list-1" required>
       <datalist id="destination-list-1">
         ${optionsTemplate}
       </datalist>
@@ -137,15 +133,19 @@ const createNewEditTemplate = (point) => {
 export default class PointEditView extends AbstractStatefulView {
   #datepickerStart = null;
   #datepickerEnd = null;
+  #offers = null;
+  #destinations = null;
 
-  constructor(point = BLANC_EVENT) {
+  constructor(point = BLANC_EVENT, offers, destinations) {
     super();
     this._state = PointEditView.parsePointToState(point);
+    this.#offers = offers;
+    this.#destinations = destinations;
     this.#setInnerHandlers();
   }
 
   get template() {
-    return createNewEditTemplate(this._state);
+    return createNewEditTemplate(this._state, this.#offers, this.#destinations);
   }
 
   removeElement() {
@@ -246,6 +246,7 @@ export default class PointEditView extends AbstractStatefulView {
 
   #eventDestinationInputHandler = (evt) => {
     evt.preventDefault();
+    const cities = this.#destinations.map(({name}) => name);
     if (cities.includes(evt.target.value)) {
       this.updateElement({
         destination: evt.target.value,

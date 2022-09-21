@@ -1,7 +1,7 @@
 import {render, replace, remove, RenderPosition} from '../framework/render.js';
 import ListFilterView from '../view/list-filter-view.js';
 import {filter} from '../util.js';
-import {FILTER_TYPE, UpdateType} from '../mock/const.js';
+import {FILTER_TYPE, UpdateType} from '../const.js';
 
 export default class FilterPresenter {
   #filterContainer = null;

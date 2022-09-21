@@ -1,6 +1,6 @@
 import {render, remove, RenderPosition} from '../framework/render.js';
 import PointEditView from '../view/point-edit-view.js';
-import {UserAction, UpdateType} from '../mock/const.js';
+import {UserAction, UpdateType} from '../const.js';
 import {nanoid} from 'nanoid';
 import {isEscPressed} from '../util.js';
 

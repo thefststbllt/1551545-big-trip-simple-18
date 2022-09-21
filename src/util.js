@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {FILTER_TYPE} from './mock/const.js';
+import {FILTER_TYPE} from './const.js';
 const utc = require('dayjs/plugin/utc'); // eslint-disable-line
 dayjs.extend(utc);
 

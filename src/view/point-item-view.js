@@ -4,8 +4,8 @@ import he from 'he';
 
 const createNewPointItemTemplate = (point, offers, destinations) => {
   const {basePrice, dateFrom, dateTo, type, destination} = point;
-  const correctDestination = destinations.find((item) => item.id === destination || item.name === destination);
-  const {name} = correctDestination;
+  const currentDestination = destinations.find((item) => item.id === destination);
+  const {name} = currentDestination;
 
   const rightTypes = offers ? offers.filter((item) => item.type === point.type).shift() : null;
   const rightTypeOffers = rightTypes ? rightTypes.offers : null;

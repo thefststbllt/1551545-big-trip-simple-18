@@ -1,7 +1,7 @@
 import {render, replace, remove} from '../framework/render.js';
 import PointItemView from '../view/point-item-view.js';
 import PointEditView from '../view/point-edit-view.js';
-import {UserAction, UpdateType} from '../mock/const.js';
+import {UserAction, UpdateType} from '../const.js';
 import {isEscPressed} from '../util.js';
 
 const Mode = {
