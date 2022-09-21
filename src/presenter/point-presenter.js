@@ -1,6 +1,8 @@
 import {render, replace, remove} from '../framework/render.js';
 import PointItemView from '../view/point-item-view.js';
 import PointEditView from '../view/point-edit-view.js';
+import {UserAction, UpdateType} from '../mock/const.js';
+import {isEscPressed} from '../util.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -40,7 +42,8 @@ export default class PointPresenter {
     this.#pointItemComponent.setClickHandler(this.#handleEditClick);
     this.#pointEditComponent.setEditClickHandler(this.#handleFormClose);
     this.#pointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
-    if (prevPointComponent === null || prevPointEditComponent === null) {
+    this.#pointEditComponent.setDeleteClickHandler(this.#handleFormDelete);
+    if (!prevPointComponent || !prevPointEditComponent) {
       render(this.#pointItemComponent, this.#pointListContainer);
       return;
     }
@@ -83,7 +86,7 @@ export default class PointPresenter {
   };
 
   #onEscKeyDownHandler = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (isEscPressed(evt)) {
       evt.preventDefault();
       this.#replaceFormToPoint();
       document.removeEventListener('keydown', this.#onEscKeyDownHandler);
@@ -94,8 +97,21 @@ export default class PointPresenter {
     this.#replacePointToForm();
   };
 
-  #handleFormSubmit = () => {
+  #handleFormSubmit = (point) => {
+    this.#changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      point
+    );
     this.#replaceFormToPoint();
+  };
+
+  #handleFormDelete = (point) => {
+    this.#changeData(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
   };
 
   #handleFormClose = () => {
