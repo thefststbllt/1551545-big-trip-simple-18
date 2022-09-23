@@ -33,14 +33,22 @@ export default class PointsApiService extends ApiService {
     return await ApiService.parseResponse(response);
   };
 
-  // updateOffer = async (offers) => {
-  //   const response = await this._load({
-  //     url: `offers/${offers.id}`,
-  //     method: Method.PUT,
-  //     body: JSON.stringify(this.#adaptOffersToServer(offers)),
-  //     headers: new Headers({'Content-Type': 'application/json'}),
-  //   })
-  // }
+  addPoint = async (point) => {
+    const response = await this._load({
+      url: 'points',
+      method: Method.POST,
+      body: JSON.stringify(this.#adaptPointsToServer(point)),
+      headers: new Headers({'Content-Type': 'application/json'}),
+    });
+    return await ApiService.parseResponse(response);
+  };
+
+  deletePoint = async (point) =>
+    await this._load({
+      url: `points/${point.id}`,
+      method: Method.DELETE,
+    });
+
 
   #adaptPointsToServer = (point) => {
     const adaptedPoint = {
@@ -57,12 +65,5 @@ export default class PointsApiService extends ApiService {
     delete adaptedPoint.isFavorite;
 
     return adaptedPoint;
-  }
-
-  // #adaptOffersToServer = (offers) => {
-  //  const adaptedOffers = {
-  //    ...offers
-  //  };
-  //  return adaptedOffers
-  // }
+  };
 }

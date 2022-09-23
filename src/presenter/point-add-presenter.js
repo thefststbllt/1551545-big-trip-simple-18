@@ -1,7 +1,6 @@
 import {render, remove, RenderPosition} from '../framework/render.js';
 import PointEditView from '../view/point-edit-view.js';
 import {UserAction, UpdateType} from '../const.js';
-import {nanoid} from 'nanoid';
 import {isEscPressed} from '../util.js';
 
 export default class PointAddPresenter {
@@ -9,6 +8,9 @@ export default class PointAddPresenter {
   #changeData = null;
   #pointEditComponent = null;
   #buttonNewPoint = null;
+  #points = null;
+  #offers = null;
+  #destinations = null;
 
   constructor(pointListContainer, changeData, buttonNewPoint) {
     this.#pointListContainer = pointListContainer;
@@ -16,13 +18,15 @@ export default class PointAddPresenter {
     this.#buttonNewPoint = buttonNewPoint;
   }
 
-  init = () => {
-
+  init = (offers, destinations) => {
     if (this.#pointEditComponent) {
       return;
     }
 
-    this.#pointEditComponent = new PointEditView();
+    this.#offers = offers;
+    this.#destinations = destinations;
+
+    this.#pointEditComponent = new PointEditView(this.#points, this.#offers, this.#destinations);
     this.#pointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#pointEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
     this.#pointEditComponent.setEditClickHandler(this.#handleDeleteClick);
@@ -48,7 +52,7 @@ export default class PointAddPresenter {
     this.#changeData(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      {id: nanoid(), ...point}
+      point
     );
     this.destroy();
   };

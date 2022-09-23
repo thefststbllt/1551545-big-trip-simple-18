@@ -15,9 +15,6 @@ export default class TripPresenter {
   #pointsModel = null;
   #filterModel = null;
 
-  // #tripOffers = [];
-  // #tripDestinations = [];
-
   #currentSortType = null;
   #filterType = FILTER_TYPE.everything;
 
@@ -66,13 +63,10 @@ export default class TripPresenter {
   createPoint = () => {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FILTER_TYPE.everything);
-    this.#pointAddPresenter.init();
+    this.#pointAddPresenter.init(this.#pointsModel.offers, this.#pointsModel.destinations);
   };
 
   init = () => {
-    // this.#tripOffers = this.#pointsModel.offers;
-    // this.#tripDestinations = this.#pointsModel.destinations;
-
     this.#renderRoute();
     this.#renderButtonPointAdd();
   };
@@ -131,7 +125,9 @@ export default class TripPresenter {
   };
 
   #renderSort = () => {
-    render(this.#sortComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
+    const updatedSortComponent = new SortView(this.#currentSortType);
+    render(updatedSortComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
+    this.#sortComponent = updatedSortComponent;
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   };
 
@@ -142,7 +138,7 @@ export default class TripPresenter {
   };
 
   #renderLoading = () => {
-    render(this.#loadingComponent, this.#pointListComponent.element, RenderPosition.AFTERBEGIN)
+    render(this.#loadingComponent, this.#pointListComponent.element, RenderPosition.AFTERBEGIN);
   };
 
   #renderNoPointView = () => {
