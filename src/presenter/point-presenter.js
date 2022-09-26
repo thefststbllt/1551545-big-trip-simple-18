@@ -39,8 +39,8 @@ export default class PointPresenter {
 
     this.#pointItemComponent = new PointItemView(point, this.#offers, this.#destinations);
     this.#pointEditComponent = new PointEditView(point, this.#offers, this.#destinations);
-    this.#pointItemComponent.setClickHandler(this.#handleEditClick);
-    this.#pointItemComponent.setFavoriteClickHandler(this.#handleFavoriteClick.bind(this));// передаем хендлер клика по звезде
+    this.#pointItemComponent.setClickHandler(this.#handleClickOpen);
+    this.#pointItemComponent.setFavoriteClickHandler(this.#handleFavoriteClick.bind(this));
     this.#pointEditComponent.setEditClickHandler(this.#handleFormClose);
     this.#pointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#pointEditComponent.setDeleteClickHandler(this.#handleFormDelete);
@@ -94,7 +94,7 @@ export default class PointPresenter {
     }
   };
 
-  #handleEditClick = () => {
+  #handleClickOpen = () => {
     this.#replacePointToForm();
   };
 

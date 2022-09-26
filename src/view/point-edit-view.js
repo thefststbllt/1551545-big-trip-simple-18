@@ -1,19 +1,19 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import {humanizePointEditDate, humanizePointDueTime, templateCurrentTime} from '../util.js';
+import {humanizePointEditDate, templateCurrentTime} from '../util.js';
 import dayjs from 'dayjs';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/themes/material_blue.css';
 import he from 'he';
 
 const BLANC_EVENT = {
-  price: null,
   dateFrom: templateCurrentTime(),
   dateTo: templateCurrentTime(),
   destination: null,
   offers: [],
-  type: null,
-  basePrice: '',
+  type: 'taxi',
+  basePrice: null,
   isFavorite: false,
+  id: null
 };
 
 const createTypeTemplate = (type, checked) => `<div class="event__type-item">
@@ -43,7 +43,7 @@ const createEventTypeTemplate = (types, type) => {
 };
 
 const createNewEditTemplate = (point, offersCollection, destinations) => {
-  const {type, destination, dateFrom, dateTo, basePrice, offers, isFavorite} = point;
+  const {type, destination, dateFrom, dateTo, basePrice, offers, id} = point;
   const rightType = offersCollection ? offersCollection.find((item) => item.type === type) : '';
   const rightTypeOffers = rightType ? rightType.offers : '';
 
@@ -79,8 +79,6 @@ const createNewEditTemplate = (point, offersCollection, destinations) => {
 
   const slashDateFrom = dateFrom ? humanizePointEditDate(dateFrom) : humanizePointEditDate(dayjs());
   const slashDateTo = dateTo ? humanizePointEditDate(dateTo) : humanizePointEditDate(dayjs());
-  const startTime = dateFrom ? humanizePointDueTime(dateFrom) : humanizePointDueTime(dayjs());
-  const endTime = dateTo ? humanizePointDueTime(dateTo) : humanizePointDueTime(dayjs());
 
   return `<li class="trip-events__item">
             <form class="event event--edit" action="#" method="post">
@@ -89,10 +87,10 @@ const createNewEditTemplate = (point, offersCollection, destinations) => {
                  ${createEventDestinationTemplate(type)}
                  <div class="event__field-group  event__field-group--time">
                    <label class="visually-hidden" for="event-start-time-1">From</label>
-                   <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${slashDateFrom} ${startTime}">
+                   <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${slashDateFrom}">
                    &mdash;
                    <label class="visually-hidden" for="event-end-time-1">To</label>
-                   <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${slashDateTo} ${endTime}">
+                   <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${slashDateTo}">
                  </div>
 
                  <div class="event__field-group  event__field-group--price">
@@ -104,13 +102,7 @@ const createNewEditTemplate = (point, offersCollection, destinations) => {
                  </div>
 
                  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                 <button class="event__reset-btn" type="reset">Delete</button>
-                 <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
-                     <span class="visually-hidden">Add to favorite</span>
-                        <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
-                            <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"></path>
-                        </svg>
-                 </button>
+                 <button class="event__reset-btn" type="reset">${!id ? 'Cancel' : 'Delete'}</button>
                  <button class="event__rollup-btn" type="button">
                    <span class="visually-hidden">Open event</span>
                  </button>
@@ -144,8 +136,11 @@ export default class PointEditView extends AbstractStatefulView {
   #destinations = null;
   #cities = [];
 
-  constructor(point = BLANC_EVENT, offers, destinations) {
+  constructor(point, offers, destinations) {
     super();
+    if (!point) {
+      point = BLANC_EVENT;
+    }
     this._state = PointEditView.parsePointToState(point);
     this.#offers = offers;
     this.#destinations = destinations;
@@ -186,7 +181,7 @@ export default class PointEditView extends AbstractStatefulView {
         enableTime: true,
         dateFormat: 'd/m/y / h:i',
         defaultDate: this._state.dateTo,
-        minDate: this.element.querySelector('#event-start-time-1').value,
+        minDate: this._state.dateFrom,
         onChange: this.#dueDateEndChangeHandler,
       }
     );
@@ -223,7 +218,6 @@ export default class PointEditView extends AbstractStatefulView {
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#eventDestinationInputHandler);
     this.element.querySelector('.event__input--price').addEventListener('input', this.#priceInputHandler);
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
-    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteChangeHandler.bind(this));
     this.element.querySelectorAll('.event__offer-checkbox').forEach((checkbox) => checkbox.addEventListener('click', this.#checkboxClickHandler));
     this.element.addEventListener('submit', this.#formSubmitHandler);
     this.#setDatePicker();
@@ -239,7 +233,7 @@ export default class PointEditView extends AbstractStatefulView {
       const offer = offersByType.find(({id}) => offerId === id);
       offers.push(offer.id);
     } else {
-      offers = this._state.offers.filter(({id}) => offerId === id);
+      offers = this._state.offers.filter((id) => offerId !== id);
     }
 
     this.updateElement({
@@ -308,12 +302,6 @@ export default class PointEditView extends AbstractStatefulView {
     evt.preventDefault();
     this._callback.formDelete(PointEditView.parsePointToState(this._state));
   };
-
-  #favoriteChangeHandler() {
-    this.updateElement({
-      isFavorite: !this._state.isFavorite
-    });
-  }
 
   _restoreHandlers = () => {
     this.#setInnerHandlers();

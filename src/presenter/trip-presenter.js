@@ -15,7 +15,7 @@ export default class TripPresenter {
   #pointsModel = null;
   #filterModel = null;
 
-  #currentSortType = null;
+  #currentSortType = SortType.DAY;
   #filterType = FILTER_TYPE.everything;
 
   #pointListComponent = new PointListView();
@@ -90,10 +90,10 @@ export default class TripPresenter {
     }
   };
 
-  #handleModelEvent = (updateType, data) => {
+  #handleModelEvent = (updateType, point) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#pointPresenter.get(data.id).init(data);
+        this.#pointPresenter.get(point.id).init(point);
         break;
       case UpdateType.MINOR:
         this.#clearRoute();

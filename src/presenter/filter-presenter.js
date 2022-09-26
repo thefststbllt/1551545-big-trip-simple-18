@@ -1,4 +1,4 @@
-import {render, remove, RenderPosition} from '../framework/render.js';
+import {render, remove, RenderPosition, replace} from '../framework/render.js';
 import ListFilterView from '../view/list-filter-view.js';
 import {filter} from '../util.js';
 import {FILTER_TYPE, UpdateType} from '../const.js';
@@ -41,18 +41,23 @@ export default class FilterPresenter {
     ];
   }
 
-  init() {
-    this.#filterComponent = new ListFilterView(this.filters);
+  init = () => {
+    const filters = this.filters;
     const prevFilterComponent = this.#filterComponent;
-    prevFilterComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
-    render(prevFilterComponent, this.#filterContainer, RenderPosition.BEFOREEND);
-  }
+    this.#filterComponent = new ListFilterView(filters);
+    this.#filterComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
+    if (!prevFilterComponent) {
+      render(this.#filterComponent, this.#filterContainer, RenderPosition.BEFOREEND);
+      return;
+    }
+    replace(this.#filterComponent, prevFilterComponent);
+    remove(prevFilterComponent);
+  };
 
   #handleFilterTypeChange = (filterType) => {
     if (this.#filterModel.filter === filterType) {
       return;
     }
     this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
-    remove(this.#filterComponent);
   };
 }

@@ -314,15 +314,26 @@ main {
 .trip-events__trip-sort {
   margin-bottom: 8px; }
 
-.trip-events__msg {
-  margin: 0;
-  margin-top: 280px;
-  font-weight: 500;
-  font-size: 44px;
-  line-height: 60px;
-  text-align: center;
-  opacity: 0.89; }
-  .trip-events__msg--hidden {
+.trip-events__preloader {position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);
+  /*change these sizes to fit into your project*/
+  width:100px;
+  height:100px;
+}
+.trip-events__preloader hr{border:0;margin:0;width:40%;height:40%;position:absolute;border-radius:50%;animation:spin 2s ease infinite}
+
+.trip-events__preloader :first-child{background:#138DEB;animation-delay:-1.5s}
+.trip-events__preloader :nth-child(2){background:#FFD054;animation-delay:-1s}
+.trip-events__preloader :nth-child(3){background:#138DEB;animation-delay:-0.5s}
+.trip-events__preloader :last-child{background:#FFD054}
+
+@keyframes spin{
+  0%,100%{transform:translate(0)}
+  25%{transform:translate(160%)}
+  50%{transform:translate(160%, 160%)}
+  75%{transform:translate(0, 160%)}
+}
+
+.trip-events__preloader--hidden {
     display: none; }
 
 .trip-events__list {
