@@ -44,6 +44,7 @@ export default class PointPresenter {
     this.#pointEditComponent.setEditClickHandler(this.#handleFormClose);
     this.#pointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#pointEditComponent.setDeleteClickHandler(this.#handleFormDelete);
+
     if (!prevPointComponent || !prevPointEditComponent) {
       render(this.#pointItemComponent, this.#pointListContainer);
       return;
@@ -54,7 +55,8 @@ export default class PointPresenter {
     }
 
     if (this.#mode === Mode.EDITING) {
-      replace(this.#pointEditComponent, prevPointEditComponent);
+      replace(this.#pointItemComponent, prevPointEditComponent);
+      this.#mode = Mode.DEFAULT;
     }
 
     remove(prevPointComponent);
@@ -70,6 +72,25 @@ export default class PointPresenter {
     if (this.#mode !== Mode.DEFAULT) {
       this.#replaceFormToPoint();
       this.#pointEditComponent.reset(this.#point);
+    }
+  };
+
+  setSaving = () => {
+    if (this.#mode === Mode.EDITING) {
+      this.#pointEditComponent.updateElement({
+        isDisabled: true,
+        isSaving: true,
+      });
+    }
+  };
+
+  setDeleting = () => {
+    if (this.#mode === Mode.EDITING) {
+      this.#pointEditComponent.updateElement({
+        isDisabled: true,
+        isSaving: false,
+        isDeleting: true,
+      });
     }
   };
 
@@ -98,13 +119,29 @@ export default class PointPresenter {
     this.#replacePointToForm();
   };
 
+  setAborting = () => {
+    if (this.#mode === Mode.DEFAULT) {
+      this.#pointItemComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#pointEditComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#pointEditComponent.shake(resetFormState);
+  };
+
   #handleFormSubmit = (point) => {
     this.#changeData(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
       point
     );
-    this.#replaceFormToPoint();
   };
 
   #handleFormDelete = (point) => {

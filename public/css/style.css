@@ -314,10 +314,10 @@ main {
 .trip-events__trip-sort {
   margin-bottom: 8px; }
 
-.trip-events__preloader {position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);
+.trip-events__preloader {position:absolute;top:45%;left:50%;transform:translate(-50%, -50%);
   /*change these sizes to fit into your project*/
-  width:100px;
-  height:100px;
+  width:200px;
+  height:200px;
 }
 .trip-events__preloader hr{border:0;margin:0;width:40%;height:40%;position:absolute;border-radius:50%;animation:spin 2s ease infinite}
 
@@ -331,6 +331,21 @@ main {
   25%{transform:translate(160%)}
   50%{transform:translate(160%, 160%)}
   75%{transform:translate(0, 160%)}
+}
+
+.trip-events__msg {
+  margin: 0;
+  margin-top: 280px;
+  font-weight: 500;
+  font-size: 44px;
+  line-height: 60px;
+  text-align: center;
+  color: #000000;
+  opacity: 0.89;
+}
+
+.trip-events__msg--hidden {
+  display: none;
 }
 
 .trip-events__preloader--hidden {

@@ -43,7 +43,7 @@ const createEventTypeTemplate = (types, type) => {
 };
 
 const createNewEditTemplate = (point, offersCollection, destinations) => {
-  const {type, destination, dateFrom, dateTo, basePrice, offers, id} = point;
+  const {type, destination, dateFrom, dateTo, basePrice, offers, id, isSaving, isDeleting, isDisabled} = point;
   const rightType = offersCollection ? offersCollection.find((item) => item.type === type) : '';
   const rightTypeOffers = rightType ? rightType.offers : '';
 
@@ -81,7 +81,7 @@ const createNewEditTemplate = (point, offersCollection, destinations) => {
   const slashDateTo = dateTo ? humanizePointEditDate(dateTo) : humanizePointEditDate(dayjs());
 
   return `<li class="trip-events__item">
-            <form class="event event--edit" action="#" method="post">
+            <form class="event event--edit" action="#" method="post" ${isDisabled ? 'disabled' : ''}>
                <header class="event__header">
                  ${createEventTypeTemplate(typesOfEvents, type)}
                  ${createEventDestinationTemplate(type)}
@@ -101,8 +101,8 @@ const createNewEditTemplate = (point, offersCollection, destinations) => {
                    <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${he.encode(stringifiedPrice)}" min="1" required>
                  </div>
 
-                 <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                 <button class="event__reset-btn" type="reset">${!id ? 'Cancel' : 'Delete'}</button>
+                 <button class="event__save-btn  btn  btn--blue" type="submit" ${isSaving ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+                 <button class="event__reset-btn" type="reset" ${isDeleting ? 'disabled' : ''}>${!id ? 'Cancel' : `${isDeleting ? 'Deleting...' : 'Delete'}`}</button>
                  <button class="event__rollup-btn" type="button">
                    <span class="visually-hidden">Open event</span>
                  </button>
@@ -204,9 +204,20 @@ export default class PointEditView extends AbstractStatefulView {
     this.#setDateEndPicker();
   };
 
-  static parsePointToState = (point) => ({...point});
+  static parsePointToState = (point) => ({
+    ...point,
+    isDisabled: false,
+    isSaving: false,
+    isDeleting: false,
+  });
 
-  static parseStateToPoint = (state) => ({...state});
+  static parseStateToPoint = (state) => {
+    const point = {...state};
+
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
+  };
 
   reset = (point) => {
     this.updateElement(PointEditView.parsePointToState(point));
@@ -289,7 +300,7 @@ export default class PointEditView extends AbstractStatefulView {
     evt.preventDefault();
     const destinationValue = this.element.querySelector('.event__input--destination').value;
     if (this.#cities.includes(destinationValue)) {
-      this._callback.formSubmit(PointEditView.parseStateToPoint(this._state));
+      this._callback.formSubmit(this._state); // demo got this.state with parsePointToStateMethod
     }
   };
 
