@@ -1,7 +1,7 @@
 import {render, replace, remove} from '../framework/render.js';
 import PointItemView from '../view/point-item-view.js';
 import PointEditView from '../view/point-edit-view.js';
-import {UserAction, UpdateType} from '../mock/const.js';
+import {UserAction, UpdateType} from '../const.js';
 import {isEscPressed} from '../util.js';
 
 const Mode = {
@@ -40,6 +40,7 @@ export default class PointPresenter {
     this.#pointItemComponent = new PointItemView(point, this.#offers, this.#destinations);
     this.#pointEditComponent = new PointEditView(point, this.#offers, this.#destinations);
     this.#pointItemComponent.setClickHandler(this.#handleEditClick);
+    this.#pointItemComponent.setFavoriteClickHandler(this.#handleFavoriteClick.bind(this));// передаем хендлер клика по звезде
     this.#pointEditComponent.setEditClickHandler(this.#handleFormClose);
     this.#pointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#pointEditComponent.setDeleteClickHandler(this.#handleFormDelete);
@@ -110,7 +111,19 @@ export default class PointPresenter {
     this.#changeData(
       UserAction.DELETE_POINT,
       UpdateType.MINOR,
-      point,
+      point
+    );
+  };
+
+  #handleFavoriteClick = (point) => {
+    this.#changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      Object.assign(
+        {},
+        point,
+        {isFavorite: !point.isFavorite},
+      ),
     );
   };
 
