@@ -1,4 +1,4 @@
-import {render, remove, RenderPosition, replace} from '../framework/render.js';
+import {render, RenderPosition} from '../framework/render.js';
 import ListFilterView from '../view/list-filter-view.js';
 import {filter} from '../util.js';
 import {FILTER_TYPE, UpdateType} from '../const.js';
@@ -44,14 +44,11 @@ export default class FilterPresenter {
   init = () => {
     const filters = this.filters;
     const prevFilterComponent = this.#filterComponent;
-    this.#filterComponent = new ListFilterView(filters);
+    this.#filterComponent = new ListFilterView(filters, this.#filterModel.filter);
     this.#filterComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
     if (!prevFilterComponent) {
       render(this.#filterComponent, this.#filterContainer, RenderPosition.BEFOREEND);
-      return;
     }
-    replace(this.#filterComponent, prevFilterComponent);
-    remove(prevFilterComponent);
   };
 
   #handleFilterTypeChange = (filterType) => {

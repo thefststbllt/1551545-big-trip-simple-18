@@ -8,6 +8,7 @@ import ButtonPointAddView from '../view/button-point-add-view.js';
 import {sortPointsByPrice, sortPointsByDay, sortPointsByTime} from '../util.js';
 import {SortType, UserAction, UpdateType, FILTER_TYPE} from '../const.js';
 import PointAddPresenter from './point-add-presenter.js';
+import FilterPresenter from '../presenter/filter-presenter.js';
 import LoadingView from '../view/loading-view.js';
 import {filter} from '../util.js';
 
@@ -34,10 +35,11 @@ export default class TripPresenter {
 
   #pointPresenter = new Map();
   #pointAddPresenter = null;
+  #filterPresenter = null;
   #isLoading = true;
   #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
 
-  constructor(tripContainer, pointsModel, filterModel, buttonPointAddContainer) {
+  constructor(tripContainer, pointsModel, filterModel, buttonPointAddContainer, filterContainer) {
     this.#tripContainer = tripContainer;
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
@@ -49,6 +51,7 @@ export default class TripPresenter {
     this.#filterModel.addObserver(this.#handleModelEvent);
 
     this.#pointAddPresenter = new PointAddPresenter(this.#pointListComponent, this.#handleViewAction, this.#buttonPointAddComponent);
+    this.#filterPresenter = new FilterPresenter(filterContainer, filterModel, pointsModel);
   }
 
   get points () {
@@ -74,6 +77,7 @@ export default class TripPresenter {
   };
 
   init = () => {
+    this.#filterPresenter.init();
     this.#renderRoute();
     this.#renderButtonPointAdd();
   };

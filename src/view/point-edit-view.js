@@ -217,6 +217,8 @@ export default class PointEditView extends AbstractStatefulView {
     delete point.isDisabled;
     delete point.isSaving;
     delete point.isDeleting;
+
+    return point;
   };
 
   reset = (point) => {
@@ -300,7 +302,7 @@ export default class PointEditView extends AbstractStatefulView {
     evt.preventDefault();
     const destinationValue = this.element.querySelector('.event__input--destination').value;
     if (this.#cities.includes(destinationValue)) {
-      this._callback.formSubmit(this._state); // demo got this.state with parsePointToStateMethod
+      this._callback.formSubmit(PointEditView.parseStateToPoint(this._state));
     }
   };
 
