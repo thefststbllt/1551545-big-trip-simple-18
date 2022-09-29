@@ -1,27 +1,26 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-const createFilterItemTemplate = (filter) => {
-
-  const {type, checked, disabled} = filter;
+const createFilterItemTemplate = (filter, currentFilterType) => {
+  const {type, name, count} = filter;
 
   return `<div class="trip-filters__filter">
            <input
-             id="filter-${type}"
+             id="filter-${name}"
              class="trip-filters__filter-input visually-hidden"
              type="radio"
              name="trip-filter"
-             value="${type}"
-             ${checked ? 'checked' : ''}
-             ${disabled ? 'disabled' : ''}/>` +
+             value="${name}"
+             ${type === currentFilterType ? 'checked' : ''}
+             ${count !== 0 ? 'disabled' : ''}/>` +
           `<label
              class ="trip-filters__filter-label"
-             for="filter-${type}">${type}
+             for="filter-${name}">${name}
            </label>
           </div>`;
 };
 
-const createFiltersTemplate = (filters) => {
-  const filterItemsTemplate = filters.map((filter) => createFilterItemTemplate(filter));
+const createFiltersTemplate = (filters, currentFilterType) => {
+  const filterItemsTemplate = filters.map((filter) => createFilterItemTemplate(filter, currentFilterType));
 
   return '<form class="trip-filters" action="#" method="get">' +
            `${filterItemsTemplate.join('')}` +
@@ -31,14 +30,16 @@ const createFiltersTemplate = (filters) => {
 
 export default class ListFilterView extends AbstractView {
   #filters = [];
+  #currentFilterType = null;
 
-  constructor(filters) {
+  constructor(filters, currentFilterType) {
     super();
     this.#filters = filters;
+    this.#currentFilterType = currentFilterType;
   }
 
   get template() {
-    return createFiltersTemplate(this.#filters);
+    return createFiltersTemplate(this.#filters, this.#currentFilterType);
   }
 
   setFilterTypeChangeHandler(callback) {
@@ -48,8 +49,7 @@ export default class ListFilterView extends AbstractView {
 
   #filterTypeChangeHandler = (evt) => {
     evt.preventDefault();
-
     this._callback.filterTypeChange(evt.target.value);
+    evt.target.checked = true;
   };
 }
-

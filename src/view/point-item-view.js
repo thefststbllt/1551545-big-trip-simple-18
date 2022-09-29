@@ -30,7 +30,7 @@ const createPointItemTemplate = (point, offers, destinations) => {
         <div class="event">
             <time class="event__date" datetime="2019-03-18">${eventDate}</time>
             <div class="event__type">
-                <img class="event__type-icon" width="42" height="42" src="img/icons/${type ? type : 'question-mark'}.png" alt="Event type icon">
+                <img class="event__type-icon" width="42" height="42" src="img/icons/${type ? type : ''}.png" alt="Event type icon">
             </div>
             <h3 class="event__title">${type ? type : ''} ${name}</h3>
             <div class="event__schedule">
