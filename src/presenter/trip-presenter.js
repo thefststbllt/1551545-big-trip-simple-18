@@ -155,7 +155,7 @@ export default class TripPresenter {
   };
 
   #renderTripInfo = () => {
-    render(this.#tripInfoComponent, this.#headerContainer, RenderPosition.AFTERBEGIN)
+    render(this.#tripInfoComponent, this.#headerContainer, RenderPosition.AFTERBEGIN);
   };
 
   #renderButtonPointAdd = () => {
