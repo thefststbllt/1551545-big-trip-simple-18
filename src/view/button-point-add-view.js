@@ -15,8 +15,8 @@ export default class ButtonPointAddView extends AbstractView {
     this.element.disabled = true;
   }
 
-  setClickHandler = (callback) => {
-    this._callback.openPointAdd = callback;
+  setClickHandler = (cb) => {
+    this._callback.openPointAdd = cb;
     this.element.addEventListener('click', this.#clickHandler);
   };
 

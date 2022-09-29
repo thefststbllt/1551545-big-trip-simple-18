@@ -1,4 +1,4 @@
-import {render, RenderPosition} from '../framework/render';
+import {remove, render, RenderPosition, replace} from '../framework/render';
 import ListFilterView from '../view/list-filter-view';
 import {filter} from '../util';
 import {FILTER_TYPE, UpdateType} from '../const';
@@ -15,41 +15,38 @@ export default class FilterPresenter {
     this.#filterModel = filterModel;
     this.#pointsModel = pointsModel;
 
-    this.#pointsModel.addObserver(this.init);
-    this.#filterModel.addObserver(this.init);
+    this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get filters() {
     const points = this.#pointsModel.points;
 
-    return [
-      {
-        type: FILTER_TYPE.everything,
-        name: 'everything',
-        count: filter[FILTER_TYPE.everything](points).length,
-      },
-      {
-        type: FILTER_TYPE.future,
-        name: 'future',
-        count: filter[FILTER_TYPE.future](points).length,
-      },
-      {
-        type: FILTER_TYPE.past,
-        name: 'past',
-        count: filter[FILTER_TYPE.past](points).length,
-      },
-    ];
+    return Object.values(FILTER_TYPE).map((type) => ({
+      type,
+      checked: type === this.#filterModel.filter,
+      disabled: !filter[type](points).length,
+    }));
   }
+
 
   init = () => {
     const filters = this.filters;
     const prevFilterComponent = this.#filterComponent;
-    this.#filterComponent = new ListFilterView(filters, this.#filterModel.filter);
+
+    this.#filterComponent = new ListFilterView(filters);
     this.#filterComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
+
     if (!prevFilterComponent) {
       render(this.#filterComponent, this.#filterContainer, RenderPosition.BEFOREEND);
+      return;
     }
+
+    replace(this.#filterComponent, prevFilterComponent);
+    remove(prevFilterComponent);
   };
+
+  #handleModelEvent = () => this.init();
 
   #handleFilterTypeChange = (filterType) => {
     if (this.#filterModel.filter === filterType) {

@@ -7,8 +7,8 @@ const createPointItemTemplate = (point, offers, destinations) => {
   const currentDestination = destinations.find((item) => item.id === destination || item.name === destination);
   const {name} = currentDestination;
 
-  const rightTypes = offers ? offers.filter((item) => item.type === point.type).shift() : null;
-  const rightTypeOffers = rightTypes ? rightTypes.offers : null;
+  const rightTypes = offers?.filter((item) => item.type === point.type).shift() ?? null;
+  const rightTypeOffers = rightTypes?.offers ?? null;
 
   const getOfferTemplate = (offer) => `<li class="event__offer">
         <span class="event__offer-title">${offer.title}</span>
@@ -16,9 +16,9 @@ const createPointItemTemplate = (point, offers, destinations) => {
         <span class="event__offer-price">${offer.price}</span>
     </li>`;
 
-  const generatedOfferTemplate = rightTypeOffers ? rightTypeOffers.map((offer) => point.offers.includes(offer.id) ? getOfferTemplate(offer) : '') : '';
+  const generatedOfferTemplate = rightTypeOffers?.map((offer) => point.offers.includes(offer.id) ? getOfferTemplate(offer) : '') ?? '';
 
-  const stringSelectedOffers = generatedOfferTemplate ? generatedOfferTemplate.join('') : '';
+  const stringSelectedOffers = generatedOfferTemplate?.join('') ?? '';
   const stringifiedPrice = basePrice.toString();
 
   const eventDate = dateFrom ? humanizePointDueDate(dateFrom) : '';
@@ -30,9 +30,9 @@ const createPointItemTemplate = (point, offers, destinations) => {
         <div class="event">
             <time class="event__date" datetime="2019-03-18">${eventDate}</time>
             <div class="event__type">
-                <img class="event__type-icon" width="42" height="42" src="img/icons/${type ? type : ''}.png" alt="Event type icon">
+                <img class="event__type-icon" width="42" height="42" src="img/icons/${type ?? ''}.png" alt="Event type icon">
             </div>
-            <h3 class="event__title">${type ? type : ''} ${name}</h3>
+            <h3 class="event__title">${type ?? ''} ${name}</h3>
             <div class="event__schedule">
                 <p class="event__time">
                     <time class="event__start-time" datetime="2019-03-18T10:30">${startTime}</time>&mdash;<time class="event__end-time" datetime="2019-03-18T11:00">${endTime}</time>
@@ -80,8 +80,8 @@ export default class PointItemView extends AbstractStatefulView {
     return createPointItemTemplate(this._state, this.#offers, this.#destinations);
   }
 
-  setClickHandler = (callback) => {
-    this._callback.click = callback;
+  setClickHandler = (cb) => {
+    this._callback.click = cb;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
   };
 
@@ -90,8 +90,8 @@ export default class PointItemView extends AbstractStatefulView {
     this._callback.click();
   };
 
-  setFavoriteClickHandler = (callback) => {
-    this._callback.favoriteClick = callback;
+  setFavoriteClickHandler = (cb) => {
+    this._callback.favoriteClick = cb;
     this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
   };
 
