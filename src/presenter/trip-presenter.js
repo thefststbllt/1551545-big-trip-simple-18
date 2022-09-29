@@ -4,6 +4,7 @@ import PointListView from '../view/point-list-view.js';
 import NoPointView from '../view/no-point-view.js';
 import SortView from '../view/sort-view.js';
 import PointPresenter from './point-presenter.js';
+import TripInfoView from '../view/trip-info-view.js';
 import ButtonPointAddView from '../view/button-point-add-view.js';
 import {sortPointsByPrice, sortPointsByDay, sortPointsByTime} from '../util.js';
 import {SortType, UserAction, UpdateType, FILTER_TYPE} from '../const.js';
@@ -31,7 +32,8 @@ export default class TripPresenter {
 
   #noPointComponent = null;
   #buttonPointAddComponent = null;
-  #buttonPointAddContainer = null;
+  #headerContainer = null;
+  #tripInfoComponent = null;
 
   #pointPresenter = new Map();
   #pointAddPresenter = null;
@@ -39,12 +41,13 @@ export default class TripPresenter {
   #isLoading = true;
   #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
 
-  constructor(tripContainer, pointsModel, filterModel, buttonPointAddContainer, filterContainer) {
+  constructor(tripContainer, pointsModel, filterModel, headerContainer, filterContainer) {
     this.#tripContainer = tripContainer;
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
     this.#buttonPointAddComponent = new ButtonPointAddView();
-    this.#buttonPointAddContainer = buttonPointAddContainer;
+    this.#tripInfoComponent = new TripInfoView();
+    this.#headerContainer = headerContainer;
     this.#buttonPointAddComponent.setClickHandler(this.createPoint);
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
@@ -79,6 +82,7 @@ export default class TripPresenter {
   init = () => {
     this.#filterPresenter.init();
     this.#renderRoute();
+    this.#renderTripInfo();
     this.#renderButtonPointAdd();
   };
 
@@ -130,8 +134,8 @@ export default class TripPresenter {
         this.#renderRoute();
         break;
       case UpdateType.MAJOR:
-        this.#clearRoute();
-        this.#renderRoute({resetSortType: true});
+        this.#clearRoute({resetSortType: true});
+        this.#renderRoute();
         break;
       case UpdateType.INIT:
         this.#isLoading = false;
@@ -150,8 +154,12 @@ export default class TripPresenter {
     this.#renderRoute();
   };
 
+  #renderTripInfo = () => {
+    render(this.#tripInfoComponent, this.#headerContainer, RenderPosition.AFTERBEGIN)
+  };
+
   #renderButtonPointAdd = () => {
-    render(this.#buttonPointAddComponent, this.#buttonPointAddContainer);
+    render(this.#buttonPointAddComponent, this.#headerContainer);
   };
 
   #renderSort = () => {
