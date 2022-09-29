@@ -1,4 +1,4 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractView from '../framework/view/abstract-view';
 import {FILTER_TYPE} from '../const.js';
 
 const NoPointsTextType = {

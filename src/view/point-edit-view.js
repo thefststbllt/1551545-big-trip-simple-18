@@ -1,5 +1,5 @@
-import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import {humanizePointEditDate, templateCurrentTime} from '../util.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
+import {humanizePointEditDate, templateCurrentTime} from '../util';
 import dayjs from 'dayjs';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/themes/material_blue.css';

@@ -11,8 +11,6 @@ const UpdateType = {
   INIT: 'INIT'
 };
 
-const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-
 const FILTER_TYPE = {
   everything: 'everything',
   future: 'future',
@@ -25,4 +23,9 @@ const SortType = {
   TIME: 'time'
 };
 
-export {UserAction, UpdateType, EVENT_TYPES, FILTER_TYPE, SortType};
+export {
+  UserAction,
+  UpdateType,
+  FILTER_TYPE,
+  SortType
+};

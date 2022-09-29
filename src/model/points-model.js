@@ -1,5 +1,5 @@
-import Observable from '../framework/observable.js';
-import {UpdateType} from '../const.js';
+import Observable from '../framework/observable';
+import {UpdateType} from '../const';
 
 export default class PointsModel extends Observable {
   #pointsApiService = null;
