@@ -1,7 +1,8 @@
 import {render, remove, RenderPosition} from '../framework/render';
-import PointEditView from '../view/point-edit-view';
 import {UserAction, UpdateType} from '../const';
 import {isEscPressed} from '../util';
+
+import PointEditView from '../view/point-edit-view';
 
 export default class PointAddPresenter {
   #pointListContainer = null;

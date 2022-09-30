@@ -1,6 +1,7 @@
-import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import {humanizePointDueDate, humanizePointDueTime} from '../util';
 import he from 'he';
+
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
 const createPointItemTemplate = (point, offers, destinations) => {
   const {basePrice, dateFrom, dateTo, type, destination, isFavorite} = point;

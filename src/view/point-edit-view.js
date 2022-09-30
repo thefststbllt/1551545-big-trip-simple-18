@@ -1,9 +1,10 @@
-import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import {humanizePointEditDate, templateCurrentTime} from '../util';
 import dayjs from 'dayjs';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/themes/material_blue.css';
 import he from 'he';
+
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
 const BLANC_EVENT = {
   dateFrom: templateCurrentTime(),

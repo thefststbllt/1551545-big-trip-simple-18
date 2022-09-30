@@ -1,16 +1,19 @@
 import {render, remove, RenderPosition} from '../framework/render';
+import {sortPointsByPrice, sortPointsByDay, sortPointsByTime, filter} from '../util';
+import {SortType, UserAction, UpdateType, FILTER_TYPE} from '../const';
+
 import UiBlocker from '../framework/ui-blocker/ui-blocker';
+
 import PointListView from '../view/point-list-view';
 import NoPointView from '../view/no-point-view';
 import SortView from '../view/sort-view';
-import PointPresenter from './point-presenter';
 import TripInfoView from '../view/trip-info-view';
+import LoadingView from '../view/loading-view';
+
 import ButtonPointAddView from '../view/button-point-add-view';
-import {sortPointsByPrice, sortPointsByDay, sortPointsByTime, filter} from '../util';
-import {SortType, UserAction, UpdateType, FILTER_TYPE} from '../const';
+import PointPresenter from './point-presenter';
 import PointAddPresenter from './point-add-presenter';
 import FilterPresenter from '../presenter/filter-presenter';
-import LoadingView from '../view/loading-view';
 
 const TimeLimit = {
   LOWER_LIMIT: 350,

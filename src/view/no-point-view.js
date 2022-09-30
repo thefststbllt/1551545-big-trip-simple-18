@@ -1,11 +1,6 @@
-import AbstractView from '../framework/view/abstract-view';
-import {FILTER_TYPE} from '../const.js';
+import {NoPointsTextType} from '../const';
 
-const NoPointsTextType = {
-  [FILTER_TYPE.everything]: 'Click + New event to create your first point',
-  [FILTER_TYPE.future]: 'There are no future events now',
-  [FILTER_TYPE.past]: 'There are no past events now'
-};
+import AbstractView from '../framework/view/abstract-view';
 
 const createNoPointTemplate = (filterType) => {
   const createNoPointsText = NoPointsTextType[filterType];

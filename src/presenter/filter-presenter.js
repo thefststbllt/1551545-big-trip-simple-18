@@ -1,7 +1,8 @@
 import {remove, render, RenderPosition, replace} from '../framework/render';
-import ListFilterView from '../view/list-filter-view';
-import {filter} from '../util';
 import {FILTER_TYPE, UpdateType} from '../const';
+import {filter} from '../util';
+
+import ListFilterView from '../view/list-filter-view';
 
 export default class FilterPresenter {
   #filterContainer = null;
