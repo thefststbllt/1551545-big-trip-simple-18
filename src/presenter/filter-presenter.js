@@ -1,5 +1,5 @@
 import {remove, render, RenderPosition, replace} from '../framework/render';
-import {FILTER_TYPE, UpdateType} from '../const';
+import {FilterType, UpdateType} from '../const';
 import {filter} from '../util';
 
 import ListFilterView from '../view/list-filter-view';
@@ -23,7 +23,7 @@ export default class FilterPresenter {
   get filters() {
     const points = this.#pointsModel.points;
 
-    return Object.values(FILTER_TYPE).map((type) => ({
+    return Object.values(FilterType).map((type) => ({
       type,
       checked: type === this.#filterModel.filter,
       disabled: !filter[type](points).length,

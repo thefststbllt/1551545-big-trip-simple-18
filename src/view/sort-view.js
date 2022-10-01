@@ -41,6 +41,15 @@ export default class SortView extends AbstractView {
     return createSortTemplate(this.#sortType);
   }
 
+  setSortTypeChangeHandler = (cb) => {
+    this._callback.sortTypeChange = cb;
+    this.element.addEventListener('click', this.#sortTypeChangeHandler);
+  };
+
+  setSortDisabled() {
+    this.element.querySelectorAll('.trip-sort__input').forEach((item) => item.setAttribute('disabled', ''));
+  }
+
   #sortTypeChangeHandler = (evt) => {
     if (evt.target.tagName !== 'LABEL') {
       return;
@@ -50,13 +59,4 @@ export default class SortView extends AbstractView {
     evt.target.control.checked = true;
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   };
-
-  setSortTypeChangeHandler = (cb) => {
-    this._callback.sortTypeChange = cb;
-    this.element.addEventListener('click', this.#sortTypeChangeHandler);
-  };
-
-  setSortDisabled() {
-    this.element.querySelectorAll('.trip-sort__input').forEach((item) => item.setAttribute('disabled', ''));
-  }
 }

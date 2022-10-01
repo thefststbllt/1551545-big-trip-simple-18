@@ -4,7 +4,7 @@ import PointsModel from './model/points-model';
 import FilterModel from './model/filter-model';
 import PointsApiService from './points-api-service';
 
-const AUTHORISATION = 'Basic KMaXYfYDCrLiLFscA';
+const AUTHORISATION = 'Basic KMaXYffDCrLiLFscA';
 const END_POINT = 'https://18.ecmascript.pages.academy/big-trip';
 
 const tripMainElement = document.querySelector('.trip-main');

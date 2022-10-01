@@ -15,13 +15,13 @@ export default class ButtonPointAddView extends AbstractView {
     this.element.disabled = true;
   }
 
-  #clickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.openPointAdd();
-  };
-
   setClickHandler = (cb) => {
     this._callback.openPointAdd = cb;
     this.element.addEventListener('click', this.#clickHandler);
+  };
+
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.openPointAdd();
   };
 }

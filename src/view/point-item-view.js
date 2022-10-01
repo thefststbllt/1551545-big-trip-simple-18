@@ -1,4 +1,4 @@
-import {humanizePointDueDate, humanizePointDueTime} from '../util';
+import {humanizePointDueDate, humanizePointDueTime, templateCurrentTime} from '../util';
 import he from 'he';
 
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
@@ -21,10 +21,9 @@ const createPointItemTemplate = (point, offers, destinations) => {
 
   const stringifiedSelectedOffers = generatedOfferTemplate?.join('') ?? '';
   const stringifiedPrice = basePrice.toString();
-
-  const eventDate = dateFrom ? humanizePointDueDate(dateFrom) : '';
-  const endTime = dateTo ? humanizePointDueTime(dateTo) : '';
-  const startTime = dateFrom ? humanizePointDueTime(dateFrom) : '';
+  const eventDate = dateFrom ? humanizePointDueDate(dateFrom) : humanizePointDueDate(templateCurrentTime());
+  const endTime = dateTo ? humanizePointDueTime(dateTo) : humanizePointDueTime(templateCurrentTime());
+  const startTime = dateFrom ? humanizePointDueTime(dateFrom) : humanizePointDueTime(templateCurrentTime());
 
   return (
     `<li class="trip-events__item">
@@ -77,15 +76,6 @@ export default class PointItemView extends AbstractStatefulView {
     this.updateElement(PointItemView.parsePointToState(point));
   };
 
-  #clickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.click();
-  };
-
-  #favoriteClickHandler = () => {
-    this._callback.favoriteClick(PointItemView.parsePointToState(this._state));
-  };
-
   setClickHandler = (cb) => {
     this._callback.click = cb;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
@@ -94,6 +84,15 @@ export default class PointItemView extends AbstractStatefulView {
   setFavoriteClickHandler = (cb) => {
     this._callback.favoriteClick = cb;
     this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
+  };
+
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
+
+  #favoriteClickHandler = () => {
+    this._callback.favoriteClick(PointItemView.parsePointToState(this._state));
   };
 
   static parsePointToState = (point) => ({...point});

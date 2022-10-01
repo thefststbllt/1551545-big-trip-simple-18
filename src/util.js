@@ -1,9 +1,9 @@
-import {FILTER_TYPE} from './const';
+import {FilterType} from './const';
 import dayjs from 'dayjs';
 
-const humanizePointEditDate = (dueDate) => dayjs(dueDate).format('DD/MM/YY hh:mm');
+const humanizePointEditDate = (dueDate) => dayjs(dueDate).format('DD/MM/YY HH:mm');
 const humanizePointDueDate = (dueDate) => dayjs(dueDate).format('MMM D');
-const humanizePointDueTime = (dueTime) => dayjs(dueTime).format('hh:mm');
+const humanizePointDueTime = (dueTime) => dayjs(dueTime).format('HH:mm');
 const templateCurrentTime = () => new Date().toISOString();
 
 const sortPointsByPrice = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
@@ -23,9 +23,9 @@ const isPast = (dateFrom, dateTo) =>
   dayjs(dateTo).isBefore(dayjs(), 'd');
 
 const filter = {
-  [FILTER_TYPE.everything]: (points) => points,
-  [FILTER_TYPE.past]: (points) => points.filter(({dateFrom, dateTo}) => isPast(dateFrom, dateTo)),
-  [FILTER_TYPE.future]: (points) => points.filter(({dateFrom, dateTo}) => isFuture(dateFrom, dateTo)),
+  [FilterType.everything]: (points) => points,
+  [FilterType.past]: (points) => points.filter(({dateFrom, dateTo}) => isPast(dateFrom, dateTo)),
+  [FilterType.future]: (points) => points.filter(({dateFrom, dateTo}) => isFuture(dateFrom, dateTo)),
 };
 
 export {

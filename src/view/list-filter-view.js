@@ -40,13 +40,13 @@ export default class ListFilterView extends AbstractView {
     return createFiltersTemplate(this.#filters);
   }
 
-  #filterTypeChangeHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.filterTypeChange(evt.target.value);
-  };
-
   setFilterTypeChangeHandler(cb) {
     this._callback.filterTypeChange = cb;
     this.element.addEventListener('change', this.#filterTypeChangeHandler);
   }
+
+  #filterTypeChangeHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.filterTypeChange(evt.target.value);
+  };
 }
