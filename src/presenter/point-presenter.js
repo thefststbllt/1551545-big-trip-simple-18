@@ -1,8 +1,9 @@
-import {render, replace, remove} from '../framework/render.js';
-import PointItemView from '../view/point-item-view.js';
-import PointEditView from '../view/point-edit-view.js';
-import {UserAction, UpdateType} from '../const.js';
-import {isEscPressed} from '../util.js';
+import {render, replace, remove} from '../framework/render';
+import {UserAction, UpdateType} from '../const';
+import {isEscPressed} from '../util';
+
+import PointItemView from '../view/point-item-view';
+import PointEditView from '../view/point-edit-view';
 
 const Mode = {
   DEFAULT: 'DEFAULT',

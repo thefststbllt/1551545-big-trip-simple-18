@@ -1,11 +1,6 @@
-import ApiService from './framework/api-service.js';
+import {Method} from './const';
 
-const Method = {
-  GET: 'GET',
-  PUT: 'PUT',
-  POST: 'POST',
-  DELETE: 'DELETE'
-};
+import ApiService from './framework/api-service';
 
 export default class PointsApiService extends ApiService {
   get points() {

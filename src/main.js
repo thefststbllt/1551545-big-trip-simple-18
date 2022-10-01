@@ -1,15 +1,16 @@
-import TripPresenter from './presenter/trip-presenter.js';
+import TripPresenter from './presenter/trip-presenter';
 
-import PointsModel from './model/points-model.js';
-import FilterModel from './model/filter-model.js';
+import PointsModel from './model/points-model';
+import FilterModel from './model/filter-model';
+import PointsApiService from './points-api-service';
 
-import PointsApiService from './points-api-service.js';
-
-const AUTHORISATION = 'Basic ZMaXFfYNVrLiLFscA';
+const AUTHORISATION = 'Basic KMaXYfYDCrLiLFscA';
 const END_POINT = 'https://18.ecmascript.pages.academy/big-trip';
+
 const tripMainElement = document.querySelector('.trip-main');
-const filterContainer = tripMainElement.querySelector('.trip-controls__filters');
 const tripContainer = document.querySelector('.trip-events');
+const filterContainer = tripMainElement.querySelector('.trip-controls__filters');
+
 const pointsModel = new PointsModel(new PointsApiService(END_POINT, AUTHORISATION));
 const filterModel = new FilterModel();
 const tripPresenter = new TripPresenter(tripContainer, pointsModel, filterModel, tripMainElement, filterContainer);

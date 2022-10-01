@@ -11,8 +11,6 @@ const UpdateType = {
   INIT: 'INIT'
 };
 
-const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-
 const FILTER_TYPE = {
   everything: 'everything',
   future: 'future',
@@ -25,4 +23,27 @@ const SortType = {
   TIME: 'time'
 };
 
-export {UserAction, UpdateType, EVENT_TYPES, FILTER_TYPE, SortType};
+const NoPointsTextType = {
+  [FILTER_TYPE.everything]: 'Click + New event to create your first point',
+  [FILTER_TYPE.future]: 'There are no future events now',
+  [FILTER_TYPE.past]: 'There are no past events now'
+};
+
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE'
+};
+
+const NoDataMessage = 'Ooops! Something went wrong. Please try again later...';
+
+export {
+  NoPointsTextType,
+  NoDataMessage,
+  FILTER_TYPE,
+  UserAction,
+  UpdateType,
+  SortType,
+  Method,
+};

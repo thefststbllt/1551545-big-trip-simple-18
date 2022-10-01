@@ -1,17 +1,19 @@
-import {render, remove, RenderPosition} from '../framework/render.js';
-import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
-import PointListView from '../view/point-list-view.js';
-import NoPointView from '../view/no-point-view.js';
-import SortView from '../view/sort-view.js';
-import PointPresenter from './point-presenter.js';
-import TripInfoView from '../view/trip-info-view.js';
-import ButtonPointAddView from '../view/button-point-add-view.js';
-import {sortPointsByPrice, sortPointsByDay, sortPointsByTime} from '../util.js';
-import {SortType, UserAction, UpdateType, FILTER_TYPE} from '../const.js';
-import PointAddPresenter from './point-add-presenter.js';
-import FilterPresenter from '../presenter/filter-presenter.js';
-import LoadingView from '../view/loading-view.js';
-import {filter} from '../util.js';
+import {render, remove, RenderPosition} from '../framework/render';
+import {sortPointsByPrice, sortPointsByDay, sortPointsByTime, filter} from '../util';
+import {SortType, UserAction, UpdateType, FILTER_TYPE, NoDataMessage} from '../const';
+
+import UiBlocker from '../framework/ui-blocker/ui-blocker';
+
+import PointListView from '../view/point-list-view';
+import NoPointView from '../view/no-point-view';
+import SortView from '../view/sort-view';
+import TripInfoView from '../view/trip-info-view';
+import LoadingView from '../view/loading-view';
+
+import ButtonPointAddView from '../view/button-point-add-view';
+import PointPresenter from './point-presenter';
+import PointAddPresenter from './point-add-presenter';
+import FilterPresenter from '../presenter/filter-presenter';
 
 const TimeLimit = {
   LOWER_LIMIT: 350,
@@ -46,7 +48,7 @@ export default class TripPresenter {
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
     this.#buttonPointAddComponent = new ButtonPointAddView();
-    this.#tripInfoComponent = new TripInfoView();
+    this.#tripInfoComponent = new TripInfoView(this.points);
     this.#headerContainer = headerContainer;
     this.#buttonPointAddComponent.setClickHandler(this.createPoint);
 
@@ -57,7 +59,7 @@ export default class TripPresenter {
     this.#filterPresenter = new FilterPresenter(filterContainer, filterModel, pointsModel);
   }
 
-  get points () {
+  get points() {
     this.#filterType = this.#filterModel.filter;
     const points = this.#pointsModel.points;
     const filteredPoints = filter[this.#filterType](points);
@@ -99,7 +101,7 @@ export default class TripPresenter {
         this.#pointPresenter.get(point.id).setSaving();
         try {
           await this.#pointsModel.updatePoint(updateType, point);
-        } catch(err) {
+        } catch (err) {
           this.#pointPresenter.get(point.id).setAborting();
         }
         break;
@@ -107,7 +109,7 @@ export default class TripPresenter {
         this.#pointAddPresenter.setSaving();
         try {
           await this.#pointsModel.addPoint(updateType, point);
-        } catch(err) {
+        } catch (err) {
           this.#pointAddPresenter.setAborting();
         }
         break;
@@ -115,7 +117,7 @@ export default class TripPresenter {
         this.#pointPresenter.get(point.id).setDeleting();
         try {
           await this.#pointsModel.deletePoint(updateType, point);
-        } catch(err) {
+        } catch (err) {
           this.#pointPresenter.get(point.id).setAborting();
         }
         break;
@@ -179,8 +181,14 @@ export default class TripPresenter {
     render(this.#loadingComponent, this.#pointListComponent.element, RenderPosition.AFTERBEGIN);
   };
 
+  #getNoDataPhrase() {
+    if (!this.#pointsModel.offers.length || !this.#pointsModel.destinations.length) {
+      return NoDataMessage;
+    }
+  }
+
   #renderNoPointView = () => {
-    this.#noPointComponent = new NoPointView(this.#filterType);
+    this.#noPointComponent = new NoPointView(this.#filterType, this.#getNoDataPhrase());
     render(this.#noPointComponent, this.#tripContainer, RenderPosition.BEFOREEND);
   };
 
@@ -210,15 +218,20 @@ export default class TripPresenter {
       return;
     }
 
+    if (!this.#pointsModel.offers.length || !this.#pointsModel.destinations.length) {
+      this.#buttonPointAddComponent.element.setAttribute('disabled', '');
+      this.#sortComponent.setSortDisabled();
+    }
+
     const points = this.points;
     const pointsCount = points.length;
     this.#renderSort();
-
 
     if (pointsCount === 0) {
       this.#renderNoPointView();
       return;
     }
+
     for (let i = 0; i < pointsCount; i++) {
       this.#renderPoint(this.points[i]);
     }

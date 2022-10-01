@@ -1,7 +1,8 @@
-import {render, remove, RenderPosition} from '../framework/render.js';
-import PointEditView from '../view/point-edit-view.js';
-import {UserAction, UpdateType} from '../const.js';
-import {isEscPressed} from '../util.js';
+import {render, remove, RenderPosition} from '../framework/render';
+import {UserAction, UpdateType} from '../const';
+import {isEscPressed} from '../util';
+
+import PointEditView from '../view/point-edit-view';
 
 export default class PointAddPresenter {
   #pointListContainer = null;
