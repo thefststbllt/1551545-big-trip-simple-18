@@ -1,6 +1,6 @@
 import {render, remove, RenderPosition} from '../framework/render';
 import {sortPointsByPrice, sortPointsByDay, sortPointsByTime, filter} from '../util';
-import {SortType, UserAction, UpdateType, FILTER_TYPE, NoDataMessage} from '../const';
+import {SortType, UserAction, UpdateType, FilterType, NoDataMessage} from '../const';
 
 import UiBlocker from '../framework/ui-blocker/ui-blocker';
 
@@ -26,7 +26,7 @@ export default class TripPresenter {
   #filterModel = null;
 
   #currentSortType = SortType.DAY;
-  #filterType = FILTER_TYPE.everything;
+  #filterType = FilterType.everything;
 
   #pointListComponent = new PointListView();
   #sortComponent = new SortView(this.#currentSortType);
@@ -77,7 +77,7 @@ export default class TripPresenter {
 
   createPoint = () => {
     this.#currentSortType = SortType.DAY;
-    this.#filterModel.setFilter(UpdateType.MAJOR, FILTER_TYPE.everything);
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.everything);
     this.#pointAddPresenter.init(this.#pointsModel.offers, this.#pointsModel.destinations);
   };
 

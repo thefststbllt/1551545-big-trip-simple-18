@@ -11,7 +11,7 @@ const UpdateType = {
   INIT: 'INIT'
 };
 
-const FILTER_TYPE = {
+const FilterType = {
   everything: 'everything',
   future: 'future',
   past: 'past'
@@ -24,9 +24,9 @@ const SortType = {
 };
 
 const NoPointsTextType = {
-  [FILTER_TYPE.everything]: 'Click + New event to create your first point',
-  [FILTER_TYPE.future]: 'There are no future events now',
-  [FILTER_TYPE.past]: 'There are no past events now'
+  [FilterType.everything]: 'Click + New event to create your first point',
+  [FilterType.future]: 'There are no future events now',
+  [FilterType.past]: 'There are no past events now'
 };
 
 const Method = {
@@ -41,7 +41,7 @@ const NoDataMessage = 'Ooops! Something went wrong. Please try again later...';
 export {
   NoPointsTextType,
   NoDataMessage,
-  FILTER_TYPE,
+  FilterType,
   UserAction,
   UpdateType,
   SortType,

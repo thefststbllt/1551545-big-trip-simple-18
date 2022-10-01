@@ -94,6 +94,23 @@ export default class PointPresenter {
     }
   };
 
+  setAborting = () => {
+    if (this.#mode === Mode.DEFAULT) {
+      this.#pointItemComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#pointEditComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#pointEditComponent.shake(resetFormState);
+  };
+
   #replacePointToForm = () => {
     replace(this.#pointEditComponent, this.#pointItemComponent);
     document.addEventListener('keydown', this.#onEscKeyDownHandler);
@@ -117,23 +134,6 @@ export default class PointPresenter {
 
   #handleClickOpen = () => {
     this.#replacePointToForm();
-  };
-
-  setAborting = () => {
-    if (this.#mode === Mode.DEFAULT) {
-      this.#pointItemComponent.shake();
-      return;
-    }
-
-    const resetFormState = () => {
-      this.#pointEditComponent.updateElement({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false,
-      });
-    };
-
-    this.#pointEditComponent.shake(resetFormState);
   };
 
   #handleFormSubmit = (point) => {

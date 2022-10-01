@@ -179,6 +179,21 @@ export default class PointEditView extends AbstractStatefulView {
     this.updateElement(PointEditView.parsePointToState(point));
   };
 
+  setEditClickHandler = (cb) => {
+    this._callback.editClick = cb;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+  };
+
+  setFormSubmitHandler = (cb) => {
+    this._callback.formSubmit = cb;
+    this.element.addEventListener('submit', this.#formSubmitHandler);
+  };
+
+  setDeleteClickHandler = (cb) => {
+    this._callback.formDelete = cb;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteHandler);
+  };
+
   _restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
@@ -188,13 +203,24 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #setDateStartPicker = () => {
+
+    const startField = this.element.querySelector('#event-start-time-1');
+    const endField = this.element.querySelector('#event-end-time-1');
+
     this.#datepickerStart = flatpickr(
-      this.element.querySelector('#event-start-time-1'),
+      startField,
       {
         enableTime: true,
-        dateFormat: 'd/m/y / h:i',
+        dateFormat: 'd/m/y H:i',
         defaultDate: this._state.dateFrom,
-        onChange: this.#dueDateStartChangeHandler
+        onChange: this.#dueDateStartChangeHandler,
+        onClose: () => {
+          if (this._state.dateFrom > this._state.dateTo || startField.value > endField.value) {
+            this.updateElement({
+              dateTo: this._state.dateFrom
+            });
+          }
+        }
       }
     );
   };
@@ -204,7 +230,7 @@ export default class PointEditView extends AbstractStatefulView {
       this.element.querySelector('#event-end-time-1'),
       {
         enableTime: true,
-        dateFormat: 'd/m/y / h:i',
+        dateFormat: 'd/m/y H:i',
         defaultDate: this._state.dateTo,
         minDate: this._state.dateFrom,
         onChange: this.#dueDateEndChangeHandler,
@@ -302,21 +328,6 @@ export default class PointEditView extends AbstractStatefulView {
     this.element.querySelectorAll('.event__offer-checkbox').forEach((checkbox) => checkbox.addEventListener('click', this.#checkboxClickHandler));
     this.element.addEventListener('submit', this.#formSubmitHandler);
     this.#setDatePicker();
-  };
-
-  setEditClickHandler = (cb) => {
-    this._callback.editClick = cb;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
-  };
-
-  setFormSubmitHandler = (cb) => {
-    this._callback.formSubmit = cb;
-    this.element.addEventListener('submit', this.#formSubmitHandler);
-  };
-
-  setDeleteClickHandler = (cb) => {
-    this._callback.formDelete = cb;
-    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteHandler);
   };
 
   static parsePointToState = (point) => ({
