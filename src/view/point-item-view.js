@@ -19,7 +19,7 @@ const createPointItemTemplate = (point, offers, destinations) => {
 
   const generatedOfferTemplate = rightTypeOffers?.map((offer) => point.offers.includes(offer.id) ? getOfferTemplate(offer) : '') ?? '';
 
-  const stringSelectedOffers = generatedOfferTemplate?.join('') ?? '';
+  const stringifiedSelectedOffers = generatedOfferTemplate?.join('') ?? '';
   const stringifiedPrice = basePrice.toString();
 
   const eventDate = dateFrom ? humanizePointDueDate(dateFrom) : '';
@@ -42,7 +42,7 @@ const createPointItemTemplate = (point, offers, destinations) => {
             <p class="event__price">&euro;&nbsp;<span class="event__price-value">${he.encode(stringifiedPrice)}</span></p>
             <h4 class="visually-hidden">Offers:</h4>
             <ul class="event__selected-offers">
-                ${stringSelectedOffers}
+                ${stringifiedSelectedOffers}
             </ul>
             <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
                 <span class="visually-hidden">Add to favorite</span>
@@ -69,21 +69,12 @@ export default class PointItemView extends AbstractStatefulView {
     this.#destinations = destinations;
   }
 
-  static parsePointToState = (point) => ({...point});
-
-  static parseStateToPoint = (state) => ({...state});
-
-  reset = (point) => {
-    this.updateElement(PointItemView.parsePointToState(point));
-  };
-
   get template() {
     return createPointItemTemplate(this._state, this.#offers, this.#destinations);
   }
 
-  setClickHandler = (cb) => {
-    this._callback.click = cb;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
+  reset = (point) => {
+    this.updateElement(PointItemView.parsePointToState(point));
   };
 
   #clickHandler = (evt) => {
@@ -91,14 +82,21 @@ export default class PointItemView extends AbstractStatefulView {
     this._callback.click();
   };
 
+  #favoriteClickHandler = () => {
+    this._callback.favoriteClick(PointItemView.parsePointToState(this._state));
+  };
+
+  setClickHandler = (cb) => {
+    this._callback.click = cb;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
+  };
+
   setFavoriteClickHandler = (cb) => {
     this._callback.favoriteClick = cb;
     this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
   };
 
-  #favoriteClickHandler = () => {
-    this._callback.favoriteClick(PointItemView.parsePointToState(this._state));
-  };
+  static parsePointToState = (point) => ({...point});
 }
 
 

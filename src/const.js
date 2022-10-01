@@ -36,11 +36,14 @@ const Method = {
   DELETE: 'DELETE'
 };
 
+const NoDataMessage = 'Ooops! Something went wrong. Please try again later...';
+
 export {
+  NoPointsTextType,
+  NoDataMessage,
+  FILTER_TYPE,
   UserAction,
   UpdateType,
-  FILTER_TYPE,
   SortType,
-  NoPointsTextType,
-  Method
+  Method,
 };

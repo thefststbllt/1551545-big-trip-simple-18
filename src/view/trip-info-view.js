@@ -1,4 +1,4 @@
-import AbstractStatefulView from '../framework/view/abstract-stateful-view';
+import AbstractView from '../framework/view/abstract-view';
 
 const createCostTemplate = () =>
   `<section class="trip-main__trip-info trip-info">
@@ -8,12 +8,7 @@ const createCostTemplate = () =>
     </div>
   </section>`;
 
-export default class TripInfoView extends AbstractStatefulView {
-
-  constructor() {
-    super();
-  }
-
+export default class TripInfoView extends AbstractView {
   get template() {
     return createCostTemplate();
   }

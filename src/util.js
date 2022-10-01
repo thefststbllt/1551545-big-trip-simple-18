@@ -1,13 +1,10 @@
 import {FILTER_TYPE} from './const';
 import dayjs from 'dayjs';
-const utc = require('dayjs/plugin/utc'); // eslint-disable-line
-
-dayjs.extend(utc);
 
 const humanizePointEditDate = (dueDate) => dayjs(dueDate).format('DD/MM/YY hh:mm');
 const humanizePointDueDate = (dueDate) => dayjs(dueDate).format('MMM D');
 const humanizePointDueTime = (dueTime) => dayjs(dueTime).format('hh:mm');
-const templateCurrentTime = () => dayjs.utc().format();
+const templateCurrentTime = () => new Date().toISOString();
 
 const sortPointsByPrice = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
 const sortPointsByTime = (pointA, pointB) => dayjs(pointB.dateTo).diff(dayjs(pointB.dateFrom)) - dayjs(pointA.dateTo).diff(dayjs(pointA.dateFrom));
