@@ -26,7 +26,7 @@ export default class TripPresenter {
   #filterModel = null;
 
   #currentSortType = SortType.DAY;
-  #filterType = FilterType.everything;
+  #filterType = FilterType.EVERYTHING;
 
   #pointListComponent = new PointListView();
   #sortComponent = new SortView(this.#currentSortType);
@@ -77,7 +77,7 @@ export default class TripPresenter {
 
   createPoint = () => {
     this.#currentSortType = SortType.DAY;
-    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.everything);
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#pointAddPresenter.init(this.#pointsModel.offers, this.#pointsModel.destinations);
   };
 

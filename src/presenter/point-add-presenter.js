@@ -34,7 +34,7 @@ export default class PointAddPresenter {
 
     render(this.#pointEditComponent, this.#pointListContainer.element, RenderPosition.AFTERBEGIN);
     this.#buttonNewPoint.disable();
-    document.addEventListener('keydown', this.#onEscKeyDownHandler);
+    document.addEventListener('keydown', this.#EscKeyDownHandler);
   };
 
   destroy = () => {
@@ -46,7 +46,7 @@ export default class PointAddPresenter {
     remove(this.#pointEditComponent);
     this.#pointEditComponent = null;
 
-    document.removeEventListener('keydown', this.#onEscKeyDownHandler);
+    document.removeEventListener('keydown', this.#EscKeyDownHandler);
   };
 
   setSaving = () => {
@@ -80,7 +80,7 @@ export default class PointAddPresenter {
     this.destroy();
   };
 
-  #onEscKeyDownHandler = (evt) => {
+  #EscKeyDownHandler = (evt) => {
     if (isEscPressed(evt)) {
       evt.preventDefault();
       this.destroy();

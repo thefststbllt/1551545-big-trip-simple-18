@@ -12,9 +12,9 @@ const UpdateType = {
 };
 
 const FilterType = {
-  everything: 'everything',
-  future: 'future',
-  past: 'past'
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PAST: 'past'
 };
 
 const SortType = {
@@ -24,9 +24,9 @@ const SortType = {
 };
 
 const NoPointsTextType = {
-  [FilterType.everything]: 'Click + New event to create your first point',
-  [FilterType.future]: 'There are no future events now',
-  [FilterType.past]: 'There are no past events now'
+  [FilterType.EVERYTHING]: 'Click + New event to create your first point',
+  [FilterType.FUTURE]: 'There are no future events now',
+  [FilterType.PAST]: 'There are no past events now'
 };
 
 const Method = {

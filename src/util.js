@@ -23,9 +23,9 @@ const isPast = (dateFrom, dateTo) =>
   dayjs(dateTo).isBefore(dayjs(), 'd');
 
 const filter = {
-  [FilterType.everything]: (points) => points,
-  [FilterType.past]: (points) => points.filter(({dateFrom, dateTo}) => isPast(dateFrom, dateTo)),
-  [FilterType.future]: (points) => points.filter(({dateFrom, dateTo}) => isFuture(dateFrom, dateTo)),
+  [FilterType.EVERYTHING]: (points) => points,
+  [FilterType.PAST]: (points) => points.filter(({dateFrom, dateTo}) => isPast(dateFrom, dateTo)),
+  [FilterType.FUTURE]: (points) => points.filter(({dateFrom, dateTo}) => isFuture(dateFrom, dateTo)),
 };
 
 export {
